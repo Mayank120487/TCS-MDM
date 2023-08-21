@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Valid values for:
+Type: alphanumeric,numeric, alphabetic, float
+Format: URL, AANN, -->
+<config>
+	<validation-definition>
+		<validation source="CLAMP" FieldIdentifier="Attribute@j5_PartStatus" DisplayLabel="Clamp Part Status" Mandatory="Yes" Allowed-Values="Current,Duplicate,End of Life,In Introduction,Obsolete,On Hold" ComplianceStatus=""/>		
+		<validation source="CLAMP" FieldIdentifier="Attribute@Sequence" DisplayLabel="CLAMP Sequence" Mandatory="Yes" MaxLength="3" Type="numeric" ComplianceStatus="Insufficient"/>		
+		<validation source="CLAMP" FieldIdentifier="Attribute@j5_PartStatus_duplicate" DisplayLabel="Duplicate" Mandatory="Yes" Allowed-Values="true,false" ComplianceStatus="Insufficient"/>
+
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@familyname" DisplayLabel="Family Name English" Mandatory="Yes" ComplianceStatus="Insufficient"/>
+		
+		<validation source="CLAMP" FieldIdentifier="Attribute@j5_TextePDN_link_Mandatory" DisplayLabel="OMTEC PDN Link" Mandatory="Yes" Format="URL" MaxLength="200" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@j5_TextePDN_link_NonMandatory" DisplayLabel="OMTEC PDN Link" Mandatory="No" Format="URL" MaxLength="200" ComplianceStatus="Insufficient"/>
+		
+		<validation source="CLAMP" FieldIdentifier="Attribute@j5_TextePDN_number_Mandatory" DisplayLabel="OMTEC PDN Number" Mandatory="Yes" MaxLength="20" Valid-Characters="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@j5_TextePDN_number_NonMandatory" DisplayLabel="OMTEC PDN Number" Mandatory="No" MaxLength="20" Valid-Characters="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-" ComplianceStatus="Insufficient"/>
+
+		<validation source="CLAMP" FieldIdentifier="Attribute@j5_PDN" DisplayLabel="OMTEC PDN Status" Mandatory="No" Allowed-Values="true,false" ComplianceStatus="Insufficient"/>
+
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@PartNumber" DisplayLabel="Part Number" Mandatory="Yes" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="16" ComplianceStatus="Non Compliant"/>
+		
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@Revision" DisplayLabel="Part Revision" Mandatory="Yes" Format="AANN" MaxLength="4" Valid-Characters="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" Type="alphanumeric" ComplianceStatus="Non Compliant"/>
+
+		<validation source="CLAMP" FieldIdentifier="Attribute@PartFormURL" DisplayLabel="QuickCLAMP Form" Mandatory="Yes" Format="URL" MaxLength="200" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@j5_Repairable" DisplayLabel="Repairable?" Mandatory="No" Allowed-Values="true,false" ComplianceStatus=""/>
+		
+		<validation source="CLAMP" FieldIdentifier="Attribute@j5_Interdit" DisplayLabel="Restricted Part" Mandatory="No" Allowed-Values="No restrictions,Not permitted in new design,Not recommended in new design,Part Blocked to prevent Use,Use with restriction" ComplianceStatus=""/>
+
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@ShortName" DisplayLabel="Short Description (English)" Mandatory="Yes" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="40" ComplianceStatus="Insufficient"/>
+		
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@MakeBuyIndicator" DisplayLabel="Usability" Mandatory="No" Allowed-Values="For Detailed Design,For Purchase Only,Non ALSTOM Fleet Part" ComplianceStatus="Insufficient"/>
+		
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@Class" DisplayLabel="Part Type" Mandatory="Yes" Allowed-Values="Standard Part (COTS),Part to Specification (CoS),ALSTOM Design Part" ComplianceStatus="Insufficient"/>
+		
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@UNPSC" DisplayLabel="UNSPSC" Mandatory="No" Length="8" ComplianceStatus="Non Compliant"/>
+		
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@j5_UniteGestion" DisplayLabel="Unit Of Measure" Mandatory="Yes" Allowed-Values="EA,G,KG,ML,L,M,M2,M3,FO,GL,FT,FT2,LB,MM" ComplianceStatus="Non Compliant"/>
+		
+		<validation source="CLAMP" FieldIdentifier="AttrLocSel_Attribute@j5_Designation2EN" DisplayLabel="Long Description (English)" Mandatory="Yes" MaxLength="200" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@j5_Masse" DisplayLabel="Mass" Mandatory="No" Type="float" ComplianceStatus="NOT_DEFINED"/>
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@PartLifecycleStatus" DisplayLabel="Part Lifecycle Status" Mandatory="Yes" Allowed-Values="10 – Introduction,20 – Current,30 – Mature,50 – Middle of Life,70 – End of Life,80 – Extended Support,90 – After–Life,99 – Obsolete" ComplianceStatus="Non Compliant"/>
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Supplier@PartLifecycleStatusMonitored" DisplayLabel="Part Lifecycle Status Monitored" Mandatory="No" Allowed-Values="true,false" ComplianceStatus=""/>
+		
+		<validation source="CLAMP" FieldIdentifier="Attribute@j5_SynthWorstCase" DisplayLabel="REACH Worst Case" Mandatory="Yes" Allowed-Values="Not Set,Not complete,Reach secured,SVHC criteria,Candidate,Annex XIV" ComplianceStatus="Non Compliant"/>
+
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@ProjectName" DisplayLabel="System Master" Mandatory="Yes" Allowed-Values="DMA,PLM,CLAMP" ComplianceStatus=""/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@ClampDate" DisplayLabel="CLAMP Date" Mandatory="Yes" ComplianceStatus=""/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@ReplacedBy" DisplayLabel="Clamp Replaced By" Mandatory="No" ComplianceStatus="NOT_DEFINED"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@CLAMPPPLFlag" DisplayLabel="CLAMP PPL Flag" Mandatory="No" Allowed-Values="true,false" ComplianceStatus=""/>
+		
+		<validation source="CLAMP" FieldIdentifier="Attribute@ReasonForReplacement" DisplayLabel="Reason for replacement" Mandatory="No" Allowed-Values="Duplication,Obsolescence,Restriction of Manufacturer,To be defined" ComplianceStatus="Insufficient"/>
+
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@DesignAuthority" DisplayLabel="Design Authority" Mandatory="No" MaxLength="200" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@AlstomDescriptionEN" DisplayLabel="Alstom Description (English)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="300" ComplianceStatus="Non Compliant"/>
+		
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@ShortDescriptionFR" DisplayLabel="Short Description (French)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="40" ComplianceStatus="Insufficient"/>
+		
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@ShortDescriptionAL" DisplayLabel="Short Description (German)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="40" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@ShortDescriptionAU" DisplayLabel="Short Description (Italian)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="40" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@ShortDescriptionPolish" DisplayLabel="Short Description (Polish)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="40" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@ShortDescriptionPortuguese" DisplayLabel="Short Description (Portuguese)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="40" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@ShortDescriptionES" DisplayLabel="Short Description (Spanish)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="40" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="AttrLocSel_Attribute@LongDescriptionEN" DisplayLabel="Long Description (English)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="200" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="AttrLocSel_Attribute@LongDescriptionFR" DisplayLabel="Long Description (French)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="200" ComplianceStatus="Non compliant"/>
+		<validation source="CLAMP" FieldIdentifier="AttrLocSel_Attribute@LongDescriptionAL" DisplayLabel="Long Description (German)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="200" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="AttrLocSel_Attribute@LongDescriptionAU" DisplayLabel="Long Description (Italian)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="200" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="AttrLocSel_Attribute@LongDescriptionPolish" DisplayLabel="Long Description (Polish)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="200" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="AttrLocSel_Attribute@LongDescriptionPortuguese" DisplayLabel="Long Description (Portuguese)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="200" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="AttrLocSel_Attribute@LongDescriptionES" DisplayLabel="Long Description (Spanish)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="200" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@AlstomDescriptionFR" DisplayLabel="Alstom Description (French)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="300" ComplianceStatus="Non compliant"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@AlstomDescriptionAL" DisplayLabel="Alstom Description (German)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="300" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@AlstomDescriptionAU" DisplayLabel="Alstom Description (Italian)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="300" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@AlstomDescriptionPolish" DisplayLabel="Alstom Description (Polish)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="300" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@AlstomDescriptionPortuguese" DisplayLabel="Alstom Description (Portuguese)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="300" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@AlstomDescriptionES" DisplayLabel="Alstom Description (Spanish)" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="300" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@SubmitterUnit" DisplayLabel="Submitter Unit - Unit Code" Mandatory="No" ComplianceStatus=""/>
+
+		
+		<validation source="CLAMP" FieldIdentifier="Attribute@RestrictedPartComment" DisplayLabel="Restricted Part Comment" Mandatory="No" MaxLength="200" ComplianceStatus="NOT_DEFINED"/>
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@ServiceLevel" DisplayLabel="Service Level" Mandatory="No" Allowed-Values="Not Applicable, SRU Eligible, LRU Eligible, Assembly Eligible" ComplianceStatus="NOT_DEFINED"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@SellableAsSpareParts" DisplayLabel="Sellable as Spare parts" Mandatory="No" ComplianceStatus="NOT_DEFINED"/>
+		
+		<validation source="CLAMP" FieldIdentifier="Attribute@PartROHS" DisplayLabel="PartROHS" Mandatory="No" Allowed-Values="Yes,No,Not defined" ComplianceStatus=""/>
+		
+		<validation source="CLAMP" FieldIdentifier="Attribute@j5_Commentaire" DisplayLabel="Replacement Comment" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="200" ComplianceStatus=""/>
+
+		<validation source="CLAMP" FieldIdentifier="Attribute@ReflowMaxTempTime" DisplayLabel="Reflow Max Temp &amp; Time" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="20" ComplianceStatus="Non Compliant"/>
+
+		<validation source="CLAMP" FieldIdentifier="Attribute@MSLWorstCase" DisplayLabel="MSL Worst Case" Mandatory="No" Allowed-Values="L1,L2,L3,L4,L5,L6" MaxLength="2" ComplianceStatus="Non Compliant"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@ClampMSLWorstCase" DisplayLabel="CLAMP MSL Worst Case" Mandatory="No" Allowed-Values="L1,L2,L3,L4,L5,L6" MaxLength="2" ComplianceStatus=""/>		
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@ShortDescriptionEN" DisplayLabel="Short Description (English)" Mandatory="Yes" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="40" ComplianceStatus="Insufficient"/>
+
+        <validation source="CLAMP" FieldIdentifier="Attribute@Standards" DisplayLabel="Standards" Mandatory="No" ComplianceStatus="NOT_DEFINED"/>
+
+        <validation source="CLAMP" FieldIdentifier="Attribute@Perishable" DisplayLabel="Perishable Part Status" Mandatory="No" Allowed-Values="true,false" ComplianceStatus=""/>
+       	
+		<validation source="CLAMP" FieldIdentifier="Attribute@ClampReflowMaxTempTime" DisplayLabel="CLAMP Reflow Max Temp Time" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="400" ComplianceStatus=""/>
+
+		<validation source="CLAMP" FieldIdentifier="Attribute@HazardousGoods" DisplayLabel="Hazardous Goods (S.F.)" Mandatory="No" Allowed-Values="true,false" ComplianceStatus=""/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@ClampCommodityCodes" DisplayLabel="CLAMP Commodity Codes" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="10" ComplianceStatus=""/>
+		<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@ClampControllingUnit" DisplayLabel="CLAMP Controlling Unit" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="200" ComplianceStatus=""/>
+		
+		<validation source="CLAMP" FieldIdentifier="Attribute@ClampMaterial" DisplayLabel="CLAMP Material" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$£%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="200" ComplianceStatus=""/>
+
+		<validation source="CLAMP" FieldIdentifier="Attribute@ClampVaultOwner" DisplayLabel="CLAMP Vault/Owner" Mandatory="Yes" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="30" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@ClampContainsCombustibleMat" DisplayLabel="CLAMP Contains Combustible Material?" Mandatory="Yes" Allowed-Values="true,false" ComplianceStatus=""/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@ClampProtection" DisplayLabel="CLAMP Protection" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="200" ComplianceStatus=""/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@Material" DisplayLabel="Material - Material ID" Mandatory="No" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@ClampDate" DisplayLabel="Clamp Date" Mandatory="Yes" ComplianceStatus=""/>
+		<validation source="CLAMP" FieldIdentifier="Supplier_Attribute@SupplierPartReference" DisplayLabel="Supplier Part Reference" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="40" ComplianceStatus="NOT_DEFINED"/>
+		<validation source="CLAMP" FieldIdentifier="ComposeKits_Attribute@IsComposedBy" DisplayLabel="Is Composed By" Mandatory="No" ComplianceStatus="Non Compliant"/>
+       	<validation source="CLAMP" FieldIdentifier="Attribute@ShelfLife_mandatory" DisplayLabel="Shelf Life" Mandatory="Yes" Type="float" ComplianceStatus=""/>
+		
+		<validation source="CLAMP" FieldIdentifier="Supplier_Attribute@j5_NomFournisseur" DisplayLabel="Manufacturer Short Name" Mandatory="Yes" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="40" ComplianceStatus="NOT_DEFINED"/>
+		<validation source="CLAMP" FieldIdentifier="Supplier_Attribute@j5_RefArtFourn" DisplayLabel="Manufacturer Part Number" Mandatory="Yes" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789~!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="100" ComplianceStatus="Non Compliant"/>
+		<validation source="CLAMP" FieldIdentifier="Supplier_Attribute@MPNMonitored" DisplayLabel="MPN Monitored" Mandatory="No" Allowed-Values="true,false" ComplianceStatus=""/>
+		<validation source="CLAMP" FieldIdentifier="Supplier_Attribute@MPNLifeCycleStatus" DisplayLabel="MPN Lifecycle Status" Mandatory="No" Allowed-Values="10 – Introduction,20 – Current,30 – Mature,70 – End of Life,90 – After-Life,91 – LTB Stock,90 – After-Life" ComplianceStatus="Non Compliant"/>
+		<validation source="CLAMP" FieldIdentifier="Supplier_Attribute@ClampPartManufacturerStatus" DisplayLabel="CLAMP Part Manufacturer Status" Mandatory="No" Allowed-Values="I,S,M,OA,OH,WP,R,OF,--" ComplianceStatus="Non Compliant"/>
+		
+		<validation source="CLAMP" FieldIdentifier="Supplier_Attribute@Reach" DisplayLabel="REACH" Mandatory="No" Allowed-Values="--,Reach Secured,SVHC,Candidate,Annex XIV,Not complete" ComplianceStatus="Insufficient"/>
+
+		<validation source="CLAMP" FieldIdentifier="Supplier_Attribute@LeadFree" DisplayLabel="ROHS" Mandatory="No" Allowed-Values="Not found,Not defined,Yes,No" ComplianceStatus=""/>
+		<validation source="CLAMP" FieldIdentifier="Supplier_Attribute@MSLLevel" DisplayLabel="MSL" Mandatory="No" Allowed-Values="L1,L2,L3,L4,L5,L6" ComplianceStatus="Non Compliant"/>
+		<validation source="CLAMP" FieldIdentifier="Supplier_Attribute@Plating" DisplayLabel="Plating" Mandatory="No" Allowed-Values="Unspecified,Ag,AgCu,AgPd,AgPdPt,AgPt,Au/Sn,Cu/Ag,STAINLESS,Brass/Pd,N/A,Ni,Ni/Ag,Ni/Au,NiPd,Ni/Pd/Au,Pd,Sn matte,SnAg,SnAgCu,SnAgCu or Sn matte,SnAgCu or SnCu,SnAg or SnCu,SnBi,Sn bright,SnCu,SnCuNi,SnCu or Sn matte,Sn or Ni/Pd/Au" ComplianceStatus="Non Compliant"/>
+		
+		<validation source="CLAMP" FieldIdentifier="Supplier_Attribute@OtherConstraints" DisplayLabel="Others Constraints" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="40" ComplianceStatus="Non Compliant"/>
+		
+		<validation source="CLAMP" FieldIdentifier="Supplier_Attribute@Specificity" DisplayLabel="Specificity" Mandatory="No" Allowed-Values="Unspecified,Soldered according Spec,Remove Au,Available,Reliabilit,&lt; 0.3µm,&lt; 0.76µm,&lt; 3%,&lt; 6%,MOQ,NC by Mfr*,No Stand,No valided,Reballing,According to DFM Rule N°43,Regeneration,&gt; 0.3µm,&gt; 0.76µm,&gt; 3%,&gt; 6%,Remove Bi,Test,Sort,Winterised,shelf life" ComplianceStatus=""/>
+
+		<validation source="CLAMP" FieldIdentifier="Supplier_Attribute@MaxTemp" DisplayLabel="Reflow Maximum Temperature" Mandatory="No" Type="numeric" ComplianceStatus=""/>
+		
+		<validation source="CLAMP" FieldIdentifier="Supplier_Attribute@MaxTime" DisplayLabel="Reflow Maximum Time" Mandatory="No" Type="numeric" ComplianceStatus=""/>
+   
+    <validation source="CLAMP" FieldIdentifier="Supplier_Attribute@warningProcess" DisplayLabel="Warning Process" Mandatory="No" Allowed-Values="true,false" ComplianceStatus="Insufficient"/>
+    
+		<validation source="CLAMP" FieldIdentifier="FamilyAttrVal_Attribute@AttrId" DisplayLabel="Attribute ID" Mandatory="Yes" ComplianceStatus="Non Compliant"/>
+		<validation source="CLAMP" FieldIdentifier="FamilyAttrVal_Attribute@AttrValue" DisplayLabel="Value" Mandatory="No" ComplianceStatus="Insufficient"/>
+		<validation source="CLAMP" FieldIdentifier="FamilyAttrVal_Attribute@SysUnit" DisplayLabel="International System of Unit" Mandatory="No" ComplianceStatus="NOT_DEFINED"/>
+
+		<validation source="CLAMP" FieldIdentifier="Attribute@clampCustomerName" DisplayLabel="CLAMP Customer" Mandatory="No" ComplianceStatus="Non compliant"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@ClampCustomerPartDescription" DisplayLabel="CLAMP Customer Part Description" Mandatory="No" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="40" ComplianceStatus=""/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@ClampCustomerPartNumber" DisplayLabel="CLAMP Customer Part Number" Mandatory="Yes" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="20" ComplianceStatus="Non compliant"/>
+		<validation source="CLAMP" FieldIdentifier="Attribute@customerPartRev" DisplayLabel="CLAMP Customer Part Revision" Mandatory="Yes" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="25" ComplianceStatus=""/>		
+		<validation source="CLAMP" FieldIdentifier="Attribute@CustomerId" DisplayLabel="Customer ID" Mandatory="Yes" ComplianceStatus="Insufficient"/>
+		
+		<validation source="CLAMP" FieldIdentifier="ComposeKits_Attribute@ComposedPartNumber" DisplayLabel="Part Composed By - Part Number" Mandatory="Yes" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" MaxLength="16" ComplianceStatus="Non Compliant"/>
+    	<validation source="CLAMP" FieldIdentifier="ComposeKits_Attribute@j5_DesignationAS400EN" DisplayLabel="Short Description English" Mandatory="Yes" ComplianceStatus=""/>
+
+    	<validation source="CLAMP" FieldIdentifier="ComposeKits_Attribute@Quantity" DisplayLabel="Quantity" Mandatory="Yes" Type="numeric" MaxLength="6" ComplianceStatus=""/>
+  <validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@unitcode" DisplayLabel="Using Unit - Unit Code" Mandatory="No" ComplianceStatus="">
+</validation>
+<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@legacycode" DisplayLabel="Using Unit - Legacy Code" Mandatory="No" MaxLength="24" Valid-Characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNÑñOPQRSTUVWXYZ0123456789!@#&amp;$%&quot;()-_+=:·.,/&lt;&gt;°'*?\ |" ComplianceStatus="">
+</validation>
+<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@originate" DisplayLabel="Projects for Parts - Originate" Mandatory="No" Allowed-Values="true,false" ComplianceStatus="">
+</validation>
+<validation source="CLAMP,DMA,PLM" FieldIdentifier="Attribute@projectId" DisplayLabel="Projects for Parts - Project ID" Mandatory="No" ComplianceStatus="">
+</validation>    
+
+	</validation-definition>
+
+	<migrationsheets>
+		<migrationsheet Identifier="parts" Excel-Uri="/w2_clamp_migration/DataMigartion/Incr3_3/Parts.xls" Excel-Headers="Part Number,Part Revision,Part Type,Unit of Measure - Unit ID,Usability,System Master,Part Lifecycle Status,Design Authority,Short Description (English),Long Description (English),Alstom Description (English),Short Description (French),Short Description (German),Short Description (Italian),Short Description (Spanish),Long Description (French),Long Description (German),Long Description (Italian),Long Description (Spanish),Alstom Description (French),Alstom Description (German),Alstom Description (Italian),Alstom Description (Spanish),Family Name English - Family Classification ID,UNSPSC - UNSPSC,Mass (kg),PPL Flag,Submitter Unit - Unit Code,QuickCLAMP Form,Restricted Part,Restricted Part Comment,Service Level,Sellable as Spare parts,Repairable ?,REACH Worst Case,Part ROHS,RISL Worst Case,Fire / Smoke,Fire/Smoke Comment,Perishable Part,Perishable Part Comment,Shelf Life,Material - Material ID,Traceability,Hazardous Goods (S.F.),Alstom_IP_Owner?,Standards - Standard technical ID,Reflow Max Temp &amp; Time,MSL Worst Case,Safety Classification - Safety Classification Id,Safety Justification Comments,Attachment,ALSTOM Assigned GTIN,International Customs Code (HS6) - Customs Code,Part Lifecycle Status Monitored,OMTEC PDN Status,OMTEC PDN Number,OMTEC PDN Link,CLAMP Controlling Unit,CLAMP Commodity Codes,CLAMP Date,CLAMP Part Status,CLAMP Sequence,CLAMP PPL Flag,CLAMP Contains Combustible Material ?,CLAMP Protection,CLAMP Material,CLAMP Vault/Owner,CLAMP Reflow Max Temp &amp; Time,CLAMP MSL Worst Case,Part Replaced By - Part Number,Reason For Replacement,Replacement Comment,Data Quality Status,Comment on migration,Duplicate,REACH Refresh Date,Fire/Smoke Refresh Date,Created by,Created,Updated by,Last Updated"/>
+		
+		<migrationsheet Identifier="partsmanufacturer" Excel-Uri="/w2_clamp_migration/DataMigartion/Incr3_3/ManufacturerParts.xls" Excel-Headers="Part Manufacturer Id,Part Number - Part Number,Manufacturer Short Name - Manufacturer ID,Manufacturer Part Number,MPN Monitored,MPN Lifecycle Status,MPN Lifecycle Status Refresh Date,Clamp Part Manufacturer Status,Reach,ROHS,Manufacturer ID - Manufacturer ID,Manufacturer DUNS - Manufacturer ID,Global Ultimate Parent - Manufacturer ID,MSL,Plating,Others Constraints,Specificity,Reflow Maximum Temperature (°C),Reflow Maximum Time (sec),External GTIN,Record Status,Start of Prototype Production,Start of Series Production,End of Sales of Part (EOS),End of Series Production,End of Sales of Spare Parts,End of Sales of Repairs for repairable parts,End of support,End of Production of Part (EOP),Warning Process"/>
+		
+		<migrationsheet Identifier="familyattributevalue" Excel-Uri="/w2_clamp_migration/DataMigartion/Incr3_3/PartFamilyAttributeValue.xls" Excel-Headers="Attribute Value ID,Part Family Classification Link - Part Number,Attribute - Attribute ID,Value"/>
+		
+		<migrationsheet Identifier="partscustomer" Excel-Uri="/w2_clamp_migration/DataMigartion/Incr3_3/PartCustomer.xls" Excel-Headers="Part Customer Id,Part Number - Part Number,Customer - Customer ID,Customer Part Number,Customer Part Description,Customer Part Revision,CLAMP Customer,CLAMP Customer Part Number,CLAMP Customer Part Description,CLAMP Customer Part Revision,Created by,Created,Updated by,Last Updated"/>
+		
+		<migrationsheet Identifier="partcomposedby" Excel-Uri="/w2_clamp_migration/DataMigartion/Incr3_3/ComposedBy.xls" Excel-Headers="Part Number - Part Number,Part Composed By - Part Number,Short Description English,Quantity,Unit Of Measure"/>
+
+		<migrationsheet Identifier="familyclassificationlink" Excel-Uri="/w2_clamp_migration/DataMigartion/Incr3_3/FamilyClassificationLink.xls" Excel-Headers="Part Number - Part Number"/>
+    
+    <migrationsheet Identifier="partunits" Excel-Uri="/w2_clamp_migration/DataMigartion/Incr3_3/usingunits.xls" Excel-Headers="Part - Part Number,Using Unit - Unit Code,Legacy Code"/>
+  
+     <migrationsheet Identifier="projectforparts" Excel-Uri="/w2_clamp_migration/DataMigartion/Incr3_3/projectforparts.xls" Excel-Headers="Part Number,Project Information,Safety Classification,Safety Justification Comment,Safety Justification Document,Traceability,Originate"/>
+
+  </migrationsheets>
+</config>

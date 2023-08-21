@@ -1,0 +1,29 @@
+{
+  "name": "PLMSIGOrchestra",
+  "description": "This is the default flow containing all of the default steps",
+  "batchSize": 100,
+  "threadCount": 4,
+  "options": {
+    "sourceQuery": null
+  },
+  "steps": {
+    "1": {		   
+		  "name" : "PLMSIGOrchestraStep1",
+		  "description" : "",
+		  "stepDefinitionName" : "PLMSIGOrchestraStep1",
+		  "stepDefinitionType" : "CUSTOM",
+		  "batchSize" : 100,
+		  "threadCount" : 4,
+		  "customHook" : { },
+		  "options" : {
+			"sourceDatabase" : "smart-data-hub-STAGING",
+			"sourceCollection" : "/sources/PLM/EngineeringParts",
+			"sourceQuery" : "cts.andQuery([cts.collectionQuery('/sources/PLM/BatchLoad'),cts.collectionQuery('/sources/PLM/EngineeringParts'),cts.elementValueQuery(xs.QName('Type'),'AT_DesignPart'),cts.elementValueQuery(xs.QName('State'),'Release'),cts.notQuery(cts.elementValueQuery(xs.QName('Design_Responsibility'),'CLAMP'))])",
+			"targetDatabase" : "smart-data-hub-FINAL",
+			"collections" : ["PLMSIGOrchestraStep1" , "OrchestraStep1" ,"/final/Orchestra/PLMSIG"],
+			"outputFormat" : "xml",				
+			"permissions" : "data-hub-operator,read,data-hub-operator,update,rest-reader,read,rest-writer,update"				
+		  }		    		  		   
+	}
+  }
+}

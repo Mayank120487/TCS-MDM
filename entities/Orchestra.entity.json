@@ -1,0 +1,19 @@
+{
+  "info" : {
+    "title" : "Orchestra",
+    "version" : "0.0.1",
+    "baseUri" : "http://Alstom.com/",
+    "description" : "An Orchestra entity"
+  },
+  "definitions" : {
+    "Orchestra" : {
+      "description" : "The Orchestra entity root.",
+      "required" : [ ],
+      "rangeIndex" : [ ],
+      "elementRangeIndex" : [ ],
+      "wordLexicon" : [ ],
+      "pii" : [ ],
+      "properties" : { }
+    }
+  }
+}

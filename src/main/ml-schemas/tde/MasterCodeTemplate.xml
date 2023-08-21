@@ -1,0 +1,366 @@
+<?xml  version="1.0" encoding="UTF-8"?>
+<template xmlns="http://marklogic.com/xdmp/tde">
+<description>Network Map</description>
+<path-namespaces>
+<path-namespace>
+<prefix>es</prefix>
+<namespace-uri>http://marklogic.com/entity-services</namespace-uri>
+</path-namespace>
+</path-namespaces>
+  <context>/finalResponse/result</context>
+
+  <collections>
+
+    <collection>/final/FinalResponse</collection>
+
+  </collections>
+  <vars>
+    <var>
+      <name>searchPartNum</name>
+      <val>./MasterData/PartNumber/string()</val>
+    </var>
+	<var>
+      <name>masterCode</name>
+      <val>./MasterData/MasterCode/string()</val>
+    </var>
+	 <var>
+      <name>masterSystem</name>
+      <val>./MasterData/MasterSystem/string()</val>
+    </var>
+	<var>
+      <name>masterSystemSource</name>
+      <val>./MasterSystem/es:envelope/es:instance/partReference/source/string()</val>
+    </var>
+	<var>
+      <name>aliasSystemSource</name>
+      <val>./AliasSystem/es:envelope/es:instance/partReference/source/string()</val>
+    </var>
+	<var>
+      <name>chkSystem1</name>
+      <val>(xs:string("") || xs:string("||") || $masterSystem)</val>
+	</var>	
+	<var>
+      <name>chkSystem2</name>
+      <val>($searchPartNum || xs:string("||"))</val>
+    </var>	
+  </vars>
+
+  <triples>
+    <triple>
+      <subject>
+                <val>$searchPartNum [.!='']</val>
+                <invalid-values>ignore</invalid-values>
+      </subject>
+      <predicate>
+                <val>xs:string('sourceIs')</val>
+      </predicate>
+      <object>
+                <val>(xs:string($masterCode) || xs:string("||") || xs:string($masterSystem))[.!=$chkSystem1]</val>
+                <invalid-values>ignore</invalid-values>
+      </object>
+    </triple>
+		
+    <triple>
+      <subject>
+                <val>$searchPartNum[.!='']</val>
+                <invalid-values>ignore</invalid-values>
+      </subject>
+      <predicate>
+                <val>xs:string('sourceIs')</val>
+      </predicate>
+      <object>
+                <val>(xs:string($searchPartNum) || xs:string("||") || xs:string($masterSystemSource))[.!='']</val>
+                <invalid-values>ignore</invalid-values>
+      </object>
+    </triple>
+	
+    <triple>
+      <subject>
+                <val>$searchPartNum[.!='']</val>
+                <invalid-values>ignore</invalid-values>
+      </subject>
+      <predicate>
+                <val>xs:string('sourceIs')</val>
+      </predicate>
+      <object>
+                <val>(xs:string($searchPartNum) || xs:string("||") || xs:string($aliasSystemSource))[.!=$chkSystem2]</val>
+                <invalid-values>ignore</invalid-values>
+      </object>
+    </triple>
+	
+	<triple>
+      <subject>
+                <val>$searchPartNum[.!='']</val>
+                <invalid-values>ignore</invalid-values>
+      </subject>
+      <predicate>
+                <val>sem:iri('MasterIs')</val>
+      </predicate>
+      <object>
+                <val>$masterCode[.!='']</val>
+				<invalid-values>ignore</invalid-values>
+      </object>
+    </triple>
+  </triples>
+
+  <templates>
+
+    <template>
+      <description>Alias Category Links</description>
+	  
+      <context>./AliasSystem/es:envelope/es:instance/partReference/aliasList/alias</context>
+      <vars>
+                <var>
+                  <name>aliasPartNum</name>
+                  <val>./partNumber/string()</val>
+                </var>
+                <var>
+                  <name>category</name>
+                  <val>./category/string()</val>
+                </var>
+				
+				<var>
+				<name>searchPartNum2</name>
+				<val>$searchPartNum</val>
+				</var>
+				
+                <var>
+                  <name>chkRef1</name>
+                  <val>xs:string('||') || xs:string($category)</val>
+                </var>		
+
+                <var>
+                  <name>chkRef2</name>
+                  <val>xs:string('--||') || xs:string($category)</val>
+                </var>		
+      </vars>
+
+      <triples>
+                <triple>
+                  <subject>
+                    <val>$searchPartNum2[.!='']</val>
+                    <invalid-values>ignore</invalid-values>
+                  </subject>
+                  <predicate>
+                    <val>xs:string('isLinkedTo')</val>
+                  </predicate>
+                  <object>
+                    <val>(xs:string($aliasPartNum) || xs:string("||") || xs:string($category)) [.!=$chkRef1 and .!=$chkRef2] </val>
+					<invalid-values>ignore</invalid-values>
+                  </object>
+                </triple>
+
+      </triples>
+
+    </template>
+
+	    <template>
+      <description>Master System Alias Category Links</description>
+	  
+      <context>./MasterSystem/es:envelope/es:instance/partReference/aliasList/alias</context>
+      <vars>
+                <var>
+                  <name>masterAliasPartNum</name>
+                  <val>./partNumber/string()</val>
+                </var>
+                <var>
+                  <name>masterCategory</name>
+                  <val>./category/string()</val>
+                </var>
+				
+				<var>
+				<name>searchPartNum2</name>
+				<val>$searchPartNum</val>
+				</var>
+				
+                <var>
+                  <name>masterChkRef1</name>
+                  <val>xs:string('||') || xs:string($masterCategory)</val>
+                </var>		
+
+                <var>
+                  <name>masterChkRef2</name>
+                  <val>xs:string('--||') || xs:string($masterCategory)</val>
+                </var>		
+      </vars>
+
+      <triples>
+                <triple>
+                  <subject>
+                    <val>$searchPartNum2[.!='']</val>
+                    <invalid-values>ignore</invalid-values>
+                  </subject>
+                  <predicate>
+                    <val>xs:string('isLinkedTo')</val>
+                  </predicate>
+                  <object>
+                    <val>(xs:string($masterAliasPartNum) || xs:string("||") || xs:string($masterCategory)) [.!=$masterChkRef1 and .!=$masterChkRef2] </val>
+					<invalid-values>ignore</invalid-values>
+                  </object>
+                </triple>
+
+      </triples>
+
+    </template>
+
+    <template>
+
+      <description>Alias Source Links</description>
+
+      <context>./AliasSystem/es:envelope/es:instance/partReference/aliasList/alias</context>
+      <vars>
+                <var>
+                  <name>aliasPartNum</name>
+                  <val>./partNumber/string()</val>
+                </var>
+
+                <var>
+                  <name>source</name>
+                  <val>xs:string(./parent::aliasList/parent::partReference/source)</val>
+                </var>
+				
+				<var>
+				<name>searchPartNum2</name>
+				<val>$searchPartNum</val>
+				</var>
+				
+                <var>
+                  <name>chkSource1</name>
+                  <val>xs:string('||') || $source</val>
+                </var>		
+
+                <var>
+                  <name>chkSource2</name>
+                  <val>xs:string('--||') || $source</val>
+                </var>				
+
+				
+				<var>
+                  <name>AliasSystemPartNumber</name>
+                  <val>xs:string(./parent::aliasList/parent::partReference/partNumber)</val>
+                </var>			
+      </vars>
+
+      <triples>
+                <triple>
+                  <subject>
+                    <val>$searchPartNum2[.!='']</val>
+                    <invalid-values>ignore</invalid-values>
+                  </subject>
+                  <predicate>
+                    <val>xs:string('sourceIs')</val>
+                  </predicate>
+                  <object>
+                    <val>(xs:string($aliasPartNum)  || xs:string("||") || xs:string($source)) [.!=$chkSource1 and .!=$chkSource2] </val>
+					<invalid-values>ignore</invalid-values>
+                  </object>
+                </triple>
+				
+				  <triple>
+                  <subject>
+                    <val>$searchPartNum2[.!='']</val>
+                    <invalid-values>ignore</invalid-values>
+                  </subject>
+                  <predicate>
+                    <val>xs:string('sourceIs')</val>
+                  </predicate>
+                  <object>
+                    <val>(xs:string($searchPartNum2)  || xs:string("||") || xs:string($source)) [.!=$chkSource1 and .!=$chkSource2] </val>
+					<invalid-values>ignore</invalid-values>
+                  </object>
+                </triple>
+				
+				<triple>
+                  <subject>
+                    <val>$searchPartNum2[.!='']</val>
+                    <invalid-values>ignore</invalid-values>
+                  </subject>
+                  <predicate>
+                    <val>xs:string('sourceIs')</val>
+                  </predicate>
+                  <object>
+                    <val>(xs:string($AliasSystemPartNumber) || xs:string("||") || xs:string($source)) </val>
+					<invalid-values>ignore</invalid-values>
+                  </object>
+                </triple>
+      </triples>
+
+    </template>
+	
+	    <template>
+
+      <description>Master Alias Source Links</description>
+
+      <context>./MasterSystem/es:envelope/es:instance/partReference/aliasList/alias</context>
+      <vars>
+                <var>
+                  <name>masterAliasPartNum</name>
+                  <val>./partNumber/string()</val>
+                </var>
+
+				<var>
+                  <name>source</name>
+                  <val>xs:string(./parent::aliasList/parent::partReference/source)</val>
+                </var>
+				
+                <var>
+                  <name>masterSource</name>
+                  <val>xs:string(./parent::aliasList/parent::partReference/source)</val>
+                </var>
+				
+				<var>
+				<name>searchPartNum2</name>
+				<val>$searchPartNum</val>
+				</var>
+				
+                <var>
+                  <name>masterChkSource1</name>
+                  <val>xs:string('||') || $source</val>
+                </var>		
+
+                <var>
+                  <name>masterChkSource2</name>
+                  <val>xs:string('--||') || $source</val>
+                </var>					
+				
+				<var>
+                  <name>MasterSystemPartNumber</name>
+                  <val>xs:string(./parent::aliasList/parent::partReference/partNumber)</val>
+                </var>	
+      </vars>
+
+      <triples>
+                <triple>
+                  <subject>
+                    <val>$searchPartNum2[.!='']</val>
+                    <invalid-values>ignore</invalid-values>
+                  </subject>
+                  <predicate>
+                    <val>xs:string('sourceIs')</val>
+                  </predicate>
+                  <object>
+                    <val>(xs:string($masterAliasPartNum)  || xs:string("||") || xs:string($masterSource)) [.!=$masterChkSource1 and .!=$masterChkSource2] </val>
+					<invalid-values>ignore</invalid-values>
+                  </object>
+                </triple>
+				
+				<triple>
+                  <subject>
+                    <val>$searchPartNum2[.!='']</val>
+                    <invalid-values>ignore</invalid-values>
+                  </subject>
+                  <predicate>
+                    <val>xs:string('sourceIs')</val>
+                  </predicate>
+                  <object>
+                    <val>(xs:string($MasterSystemPartNumber) || xs:string("||") || xs:string($source)) </val>
+					<invalid-values>ignore</invalid-values>
+                  </object>
+                </triple>
+      </triples>
+
+    </template>
+
+  </templates>
+
+</template>

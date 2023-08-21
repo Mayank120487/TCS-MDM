@@ -1,0 +1,6 @@
+{
+  "user-name": "%%sdhRESTUserName%%",
+  "description": "A user that is used for reading data from MArklogic - Exposed to Sinequa",
+  "password": "%%sdhRESTUserPassword%%",
+  "role": ["%%sdhRESTUserRole%%"]
+}

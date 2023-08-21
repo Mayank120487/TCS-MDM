@@ -1,0 +1,19 @@
+{
+  "lang" : "zxx",
+  "name" : "ONEDMAOrchestraStep1",
+  "description" : "",
+  "type" : "CUSTOM",
+  "version" : 1,
+  "options" : {
+    "collections" : [ "ONEDMAOrchestraStep1" ],
+    "sourceDatabase" : "data-hub-STAGING",
+    "permissions" : "data-hub-operator,read,data-hub-operator,update",
+    "outputFormat" : "json",
+    "targetDatabase" : "data-hub-FINAL"
+  },
+  "customHook" : { },
+  "modulePath" : "/custom-modules/custom/ONEDMAOrchestraStep1/main.sjs",
+  "retryLimit" : 0,
+  "batchSize" : 100,
+  "threadCount" : 4
+}

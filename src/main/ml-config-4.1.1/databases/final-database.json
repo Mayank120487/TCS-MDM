@@ -1,0 +1,74 @@
+{
+  "database-name": "%%mlFinalDbName%%",
+  "range-element-index": [],
+  "schema-database": "%%mlFinalSchemasDbName%%",
+  "triggers-database": "%%mlFinalTriggersDbName%%",
+  "triple-index": true,
+  "collection-lexicon": true,
+  "uri-lexicon": true,
+  "range-path-index":[
+  {
+    "scalar-type": "string",
+    "path-expression": "/finalResponse/result//alias/partNumber",
+    "collation": "http://marklogic.com/collation/codepoint",
+    "range-value-positions": false,
+    "invalid-values": "reject"
+},
+  {
+    "scalar-type": "string",
+    "path-expression": "/es:envelope/es:instance/partReference/partNumber",
+    "collation": "http://marklogic.com/collation/codepoint",
+    "range-value-positions": false,
+    "invalid-values": "reject"
+},
+{
+    "scalar-type": "string",
+    "path-expression": "/es:envelope/es:instance/partReference/partType",
+    "collation": "http://marklogic.com/collation/codepoint",
+    "range-value-positions": false,
+    "invalid-values": "reject"
+},
+{
+    "scalar-type": "string",
+    "path-expression": "/es:envelope/es:instance/partReference/source",
+    "collation": "http://marklogic.com/collation/codepoint",
+    "range-value-positions": false,
+    "invalid-values": "reject"
+},
+{
+    "scalar-type": "string",
+    "path-expression": "/MasterData/MasterCode",
+    "collation": "http://marklogic.com/collation/codepoint",
+    "range-value-positions": false,
+    "invalid-values": "reject"
+},
+{
+    "scalar-type": "string",
+    "path-expression": "/MasterData/PartNumber",
+    "collation": "http://marklogic.com/collation/codepoint",
+    "range-value-positions": false,
+    "invalid-values": "reject"
+},
+{
+    "scalar-type": "date",
+    "path-expression": "/finalResponse/step2creationDate",
+    "collation": "http://marklogic.com/collation/codepoint",
+    "range-value-positions": false,
+    "invalid-values": "reject"
+},
+{
+    "scalar-type": "string",
+    "path-expression": "/finalResponse/step2PartNumber",
+    "collation": "http://marklogic.com/collation/codepoint",
+    "range-value-positions": false,
+    "invalid-values": "reject"
+},
+{
+    "scalar-type": "string",
+    "path-expression": "/es:envelope/es:instance/partReference/aliasList/alias/partNumber",
+    "collation": "http://marklogic.com/collation/codepoint",
+    "range-value-positions": false,
+    "invalid-values": "reject"
+}
+]
+}

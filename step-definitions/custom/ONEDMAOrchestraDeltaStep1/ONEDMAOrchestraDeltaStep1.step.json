@@ -1,0 +1,19 @@
+{
+  "lang" : "zxx",
+  "name" : "ONEDMAOrchestraDeltaStep1",
+  "description" : "",
+  "type" : "CUSTOM",
+  "version" : 1,
+  "options" : {
+    "collections" : [ "ONEDMAOrchestraDeltaStep1" ],
+    "sourceDatabase" : "data-hub-STAGING",
+    "permissions" : "data-hub-operator,read,data-hub-operator,update",
+    "outputFormat" : "json",
+    "targetDatabase" : "data-hub-FINAL"
+  },
+  "customHook" : { },
+  "modulePath" : "/custom-modules/custom/ONEDMAOrchestraDeltaStep1/main.sjs",
+  "retryLimit" : 0,
+  "batchSize" : 100,
+  "threadCount" : 4
+}

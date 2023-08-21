@@ -1,0 +1,29 @@
+{
+  "name": "PLMSIGOrchestraDelta",
+  "description": "This is the default flow containing all of the default steps For delta PLMSIG",
+  "batchSize": 100,
+  "threadCount": 4,
+  "options": {
+    "sourceQuery": null
+  },
+  "steps": {
+    "1": {		   
+		  "name" : "PLMSIGOrchestraDeltaStep1",
+		  "description" : "",
+		  "stepDefinitionName" : "PLMSIGOrchestraDeltaStep1",
+		  "stepDefinitionType" : "CUSTOM",
+		  "batchSize" : 100,
+		  "threadCount" : 4,
+		  "customHook" : { },
+		  "options" : {
+			"sourceDatabase" : "smart-data-hub-STAGING",
+			"sourceCollection" : "/sources/PLM/EngineeringParts",
+			"sourceQuery" : "cts.uris(null,null,cts.andQuery([cts.collectionQuery('/sources/PLM/Master/'),cts.collectionQuery('/sources/PLM/EngineeringParts'),cts.collectionQuery(fn.formatDate(fn.currentDate(),'[D01]-[M01]-[Y0001]')),cts.elementValueQuery(xs.QName('Type'),'AT_DesignPart'),cts.elementValueQuery(xs.QName('State'),'Release'),cts.notQuery(cts.elementValueQuery(xs.QName('Design_Responsibility'),'CLAMP'))]))",
+			"targetDatabase" : "smart-data-hub-FINAL",
+			"collections" : ["PLMSIGOrchestraStep1" , "OrchestraStep1" ,"/final/Orchestra/PLMSIG"],
+			"outputFormat" : "xml",				
+			"permissions" : "data-hub-operator,read,data-hub-operator,update,rest-reader,read,rest-writer,update"				
+		  }		    		  		   
+	}
+  }
+}

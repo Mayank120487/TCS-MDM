@@ -1,0 +1,17 @@
+{
+  "info" : {
+    "title" : "GoldenPart",
+    "version" : "0.0.1",
+	"baseUri" : "http://example.org"
+  },
+  "definitions" : {
+    "GoldenPart" : {
+      "required" : [ ],
+      "pii" : [ ],
+      "elementRangeIndex" : [ ],
+      "rangeIndex" : [ ],
+      "wordLexicon" : [ ],
+      "properties" : { }
+    }
+  }
+}

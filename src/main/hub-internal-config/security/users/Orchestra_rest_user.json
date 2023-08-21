@@ -1,0 +1,6 @@
+{
+    "user-name": "%%Orchestra-login%%",
+    "description": "A user that is used for reading and writing from/in MarkLogic Data Hub databases via services",
+    "password": "%%Orchestra-password%%",
+    "role": ["Orchestra-api-role"]
+  }

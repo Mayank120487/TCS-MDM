@@ -1,0 +1,29 @@
+{
+  "name": "ONEDMAOrchestraDelta",
+  "description": "This is the default flow containing all of the default steps",
+  "batchSize": 100,
+  "threadCount": 4,
+  "options": {
+    "sourceQuery": null
+  },
+  "steps": {
+    "1": {
+      "name" : "ONEDMAOrchestraDeltaStep1",
+      "description" : "",
+      "stepDefinitionName" : "ONEDMAOrchestraDeltaStep1",
+      "stepDefinitionType" : "CUSTOM",
+      "batchSize" : 100,
+      "threadCount" : 4,
+      "customHook" : { },
+      "options" : {
+        "sourceDatabase" : "smart-data-hub-STAGING",
+        "sourceCollection" : "/sources/OneDMA/BatchLoad",
+        "sourceQuery" : "cts.uris(null,null,cts.andQuery([cts.collectionQuery('/sources/OneDMA/Parts'),cts.collectionQuery(fn.formatDate(fn.currentDate().subtract(xs.dayTimeDuration('P1D')),'[D01]-[M01]-[Y0001]'))]))",
+        "targetDatabase" : "smart-data-hub-FINAL",
+        "collections" : ["ONEDMAOrchestraStep1" , "OrchestraStep1" ,"/final/Orchestra/ONEDMA"],
+        "outputFormat" : "xml",
+        "permissions" : "data-hub-operator,read,data-hub-operator,update,rest-reader,read,rest-writer,update"
+      }
+    }
+  }
+}

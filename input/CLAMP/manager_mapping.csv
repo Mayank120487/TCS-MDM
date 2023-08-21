@@ -1,0 +1,242 @@
+Item Identifier;Activity sector;Description
+ABT;Study;ALSTOM TRANSPORT CHARLEROI
+AFI;Study;Alstom France / India
+ALG;Infra;Alstom Algeria System & Infra – Algiers
+ARE;Infra;Alstom - United Arab Emirates - System and Infra
+ARS;Study;AUSTRALIA RAILWAY SIGNALLING (Organisation TIS)
+ASM;Service;Australia - Sydney Metro
+ATA;Study;ATA : ALSTOM TIS AIX
+ATE;Service;ATEINSA Maintenance Contracts in Republica Dominicana
+ATS_UK;Study;Unit for ATS users in UK (UK BP & GIS ?)
+AUR;Study;Rolling Stock Australia
+AUS;Infra;Alstom Transport - Australia - System and Infra (TGS)
+AZB;Service;Azerbaidjan (Services)
+BAS;Service;Ballarat Services
+BCN;Study;ALSTOM TRANSPORT BARCELONE
+BGL;Study;ALSTOM TRANSPORT BANGALORE (Rolling Stock)
+BLI;Infra;APAC System & Infra - central CLAMP requesters team in Bangalore
+BLO;Study;ALSTOM TRANSPORT BANGALORE
+BLR;Study;ALSTOM TRANSPORT BANGALORE (Rolling Stock)
+BPA;Study;ALSTOM TRANSPORT SAO-PAULO (Organisation TIS)
+BPL;Study;ALSTOM TRANSPORT BRAZIL (Rolling Stock)
+BRA;Infra;Alstom Transport Brazil (System and Infra) TGS
+BTR;Study;Bombardier Transportation
+BUD;Service;TLS & C/W IN BUDAPEST
+BUE;Study;Signalling Argentina
+CAO;Study;CAO TIS (interface Clamp - CAO)
+CCA;Study;Changchun ALSTOM office
+CHN;Infra;Alstom Transport - China - System and Infra (TGS)
+CHS;Service;China (Services)
+CIM;Study;ALSTOM TRANSPORT PETITE-FORET
+CJB;Study;ALSTOM Coimbatore (Components)
+CMF;Study;ALSTOM TRANSPORT MEUDON
+CSH;Study;Shanghai ALSTOM office
+CSY;Infra;ALSTOM TRANSPORT RUEIL TGS
+CUS;Study;Components US
+CYT;Study;Cyent  (Bombardier Transportation )
+DMA;Study;DMA - UNIT for Parts Published by DMA.
+DNK;Study;Denmark & Norway
+DTR;Study;ALSTOM DIVISION TRANSPORT
+DUS;Service;US Service - Acela Depots
+EES;Study;ALSTOM TRANSPORT VILLEURBANNE
+EGI;Study;Alstom  Egypt Signaling Business
+EGY;Infra;Alstom - Egypt - System and Infra
+EIT;Infra;ALSTOM TRANSPORT ROME
+ELE;Study;CENTRE D'EXELENCE ELECTRIQUE (SITE GENERIQUE RS POUR NEO)
+ELS;Service;E-loco Services India
+ENL;Service;ALSTOM TRANSPORT RIDDERKERK
+EP2;Infra;Bangalore Metro EP2 CC – 3rd Rail Project
+ESP;Study;ELECTRICAL STANDARD PROCESS - FILTER FOR ELECTRICAL CATALOG
+ETC;Study;ETCS project - Tel Aviv
+EV6;Study;EV6 - New PLM EV6
+FBO;Study;ALSTOM TRANSPORT LE CREUSOT
+FEZ;Study;Cabliance Fès (Rolling Stock)
+FFABT;Study;Feu-Fumée site de Charleroi
+FFBCN;Study;Feu-Fumée site de Barcelone
+FFBPA;Study;Feu-Fumée site de Sao-Paulo
+FFEES;Study;Feu-Fumee site de Villeurbannes
+FFFBO;Study;Feu-Fumée site du Creusot
+FFFLO;Study;Feu-Fumée site de Belfort
+FFLHB;Study;Feu-Fumée site de Salzgitter
+FFOMG;Study;Feu-Fumée site de St Ouen
+FFREI;Study;Feu-Fumée site de Reichshoffen
+FFSAV;Study;Feu-Fumée site de Savigliano
+FFSES;Study;Feu-Fumee site of Sesto
+FFTRA;Study;Feu-Fumée site de Aytré
+FFTRO;Study;Feu-Fumée site d'Ornans
+FFTRT;Study;Feu-Fumée site de Tarbes
+FFTUS;Study;Feu-Fumée site d'Hornell
+FFVPF;Study;Feu-Fumée site de Valenciennes
+FLO;Study;ALSTOM TRANSPORT BELFORT
+FLR;Service;Service Signaling Firenze
+FRA;Infra;Alstom Transport - France - System and Infra (TGS)
+FSE;Study;France Services
+FST;Study;Fake site to enable the copy of DMA interface files in a directory in order to be sent to FastTrack
+FUS;Service;US Service - SFMTA
+GIB;Service;Gibela South African
+GIV;Study;Grain Valley Signalling Industrial
+GRC;Infra;Alstom Transport Greece - Engineering System and Infra (TGS)
+GSI;Service;UNIT FOR CLAMP TO GSI INTERFACE
+HAN;Infra;Service & Infra Hanoi
+HFA;Service;Haifa (Services)
+HGB;Study;ALSTOM APTIS
+HKG;Infra;Alstom-Region APAC-Hong Kong-System and Infra
+HKI;Study;Alstom Transport Hong Kong (TIS Organisation)
+HOH;Service;HVAC reduced hours
+HST;Study;High Speed Trains Platform
+HUS;Service;US Service - NAM Hubs
+IFF;Service;ALSTOM TRANSPORT MAINT. INFRA. FRANCE
+IFS;Service;ALSTOM TRANSPORT MAINT. INFRA. ESPAGNE
+ILI;Study;Israel Information Solution (Signalling Business)
+IND;Infra;Alstom - Region APAC - India - System and Infra
+IRV;Service;French / Spanish IRVIA joint venture
+ITA;Infra;Alstom Transport Italy - Engineering System and Infra (TGS)
+JNM;Infra;APAC System & Infra – Jaipur and Mumbai projects
+JRI;Service;Jerusalem - Infra / Civil Services
+JRR;Service;Jerusalem - RS Services
+KOC;Infra;Alstom System and Infra – India -Kochi
+KRI;Study;Alstom Transport South Korea (TIS Organisation)
+KSA;Infra;Alstom - Kingdom of Saudi Arabia - System and Infra
+LCO;Infra;Alstom - Lecco
+LHB;Study;Salzgitter - Rolling Stock & Components
+LIM;Service;Service Peru
+LIN;Study;Infotech India
+LLE;Service;Lille Service : GSI TLS
+LON;Service;London – Morden TC & Golders green
+MAA;Infra;Alstom System and Infra – India - Chennai
+MAD;Infra;Alstom Spain System & Infra
+MDH;Study;ALTSOM Transport Madhepur (Rolling Stock)
+MEA;Service;Middle East & Africa Region unit
+MEX;Infra;Alstom Transport Mexico - Engineering System and Infra TGS
+MLB;Study;Melbourne US Signalling Engineering
+MMU;Service;US Service - Morristown
+MNL;Infra;Manila - Philippines (System & Infra)
+MOD;Service;RSC Modernisation
+MON;Study;ALSTOM TRANSPORT MONTREAL (Organisation TIS)
+MOT;Service;Motala - Sweden
+MSI;Service;Metro Services India
+MTR;Study;Montreal - Headquarters Canada
+NEH;Service;ALSTOM TRANSPORT SERVICE NEUHAUSEN SWITZERLAND
+NEO;Study;ELECTRICAL PLM
+NLI;Study;Netherlands Information Solution (Signalling Business)
+NMD;Study;Nomad Digital
+NTG;Service;Nottingham - Wilkinson Street
+NTV;Service;Services Italy – NTV Project
+OFF;Study;ALSTOM TRANSPORT ST-OUEN (Rolling Stock)
+OMG;Study;Omegat St Ouen
+OTT;Study;Ottawa - Canada
+PAN;Infra;Alstom Transport - Panama  (Region: NLAM) - System and Infra
+PHL;Infra;Alstom - Philippines - System and Infra
+PLF;Service;PartsLink France
+PLG;Service;Stendal / Waibstadt - Services
+PLI;Service;Service Italie
+PLK;Service;PartsLink UK
+PLM;Study;UNIT FOR CLAMP TO PLM TIS and GSI INTERFACE
+PLO;Service;PartsLink Autre
+PLS;Service;PartsLink Spain
+PPA;Study;ALSTOM TRANSPORT KATOWICE
+PPE;Service;Services Italy – Pendolino Platform
+PPL;Study;Generic unit for Prefered Part List Management
+PTQ;Study;Alstom Le Petit Quevilly
+PTR;Study;Bellevue - Perth Rolling Stock
+PTS;Service;Nowergup - Perth Services
+QAI;Study;Alstom Transport - Qatar  Signalling
+QAT;Infra;Alstom Transport - Qatar  (Region: MEA) - System and Infra
+REG;Service;Services Italy – Regional Platfrom
+REI;Study;ALSTOM TRANSPORT REICHSHOFFEN
+RHE;Service;Reims : GSI TLS
+RID;Service;Ridderkerk site - Netherlands
+RIM;Infra;Riyadh Project for the interface between Clamp and the ERP Sun System - TGS
+RIY;Infra;Riyadh Project Metro INFRA
+ROC;Study;ALSTOM TRANSPORT ROCHESTER (Organisation TIS)
+ROI;Study;Romania Information Solution
+ROS;Service;Roumanie Service
+ROU;Infra;Alstom - Romania - System and Infra
+RSA;Study;Rolling Stock America
+RSB;Study;Alstom Transport SAO-PAULO (Rolling Stock)
+SAR;Service;Service Argentina
+SAS;Study;ALSTOM TRANSPORT BOLOGNE
+SAU;Service;Service Australia
+SAV;Study;ALSTOM TRANSPORT SAVIGLIANO
+SBR;Service;Services Brazil
+SCA;Service;Service Canada
+SCL;Service;SERVICE CHILE
+SER;Service;Service Business
+SES;Study;ALSTOM TRANSPORT SESTO
+SFB;Service;Le Creusot Service : GSI TLS
+SFL;Service;Belfort Service : GSI TLS
+SGI;Study;Alstom Transport Singapore (TIS Organisation)
+SGP;Infra;Alstom Transport APAC (Singapore) - Engineering System and Infra (TGS)
+SGS;Service;Service (TGS maintenance)
+SHK;Service;Hong Kong (Services)
+SIF;Study;ALSTOM TRANSPORT SIGNALING FRANCE
+SIL;Study;ALSTOM TRANSPORT BOREHAMWOOD
+SIS;Study;ALSTOM TRANSPORT INFORMATION SOLUTIONS ESPAGNE (TIS)
+SKA;Study;Service Alstom Astana KAZAKHSTAN
+SKH;Service;Service Alstom Astana KAZAKHSTAN
+SLO;Study;ALSTOM TRANSPORT VALENCE
+SLR;Service;La Rochelle Service : GSI TLS
+SMA;Study;ALSTOM TRANSPORT MADRID
+SMI;Service;Services Milano
+SML;Service;Service Morocco Locomotives
+SMX;Service;Service Mexico
+SND;Service;India (Service)
+SOL;Study;Sourcing OnLine (pour interface Clamp - SOL)
+SPL;Service;Service/Poland
+SPN;Service;Service Panama (TLS)
+SRE;Service;Reishoffen Service : GSI TLS
+SRI;Study;ALSTOM Transport
+SRU;Service;Service Russia
+SRV;Service;Service central codification
+SSA;Service;Services Savigliano
+SSE;Service;ALSTOM TRANSPORT SERVICE SWEDEN
+SSG;Service;Singapore (Services)
+SSI;Service;Service Signalling Italy
+SSK;Service;South Korea (Services)
+SSO;Service;Saint-Ouen Service: GSI TLS
+ST6;Study;Sorel Tracy - Canada
+STO;Study;Central Projects St Ouen 
+STR;Service;Tarbes Service : GSI TLS
+SUS;Service;Service US
+SVB;Service;Villeurbanne Service : GSI TLS
+SVP;Service;Valenciennes Service: GSI TLS
+SVS;Service;Services Savigliano - DMA interface only
+SZL;Study;Warrensburg Signalling Industrial
+TBU;Study;Bucarest
+TDL;Infra;Alstom System and Infra – India - Tundla
+THA;Infra;Alstom Transport - Thailand - System and Infra (TGS)
+TIE;Study;TIS - EX TOUR BP A LA DEFENSE
+TLS;Not TIS Unit;Site générique représentant toutes les unités à part les unités TIS
+TOR;Study;Toronto – Canada (Rolling Stock)
+TRA;Study;ALSTOM TRANSPORT AYTRE
+TRK;Study;Tarbes
+TRL;Study;ALSTOM TRANSPORT PRESTON
+TRN;Study;Neptune
+TRO;Study;ALSTOM TRANSPORT ORNANS
+TRT;Study;ALSTOM TRANSPORT TARBES
+TSI;Study;ALSTOM Projects India Limited (Organisation TIS)
+TSL;Study;ALSTOM TRANSPORT CHINA
+TUI;Study;Alstom Turkey  (Signalling Business)
+TUR;Infra;Alstom - Turkey - System and Infra
+TUS;Study;ALSTOM TRANSPORT HORNELL and ROCHESTER (Rolling Stock)
+TWI;Study;Alstom Transport Taiwan (TIS Organisation)
+TWN;Infra;Alstom-Region APAC-Taiwan- System and Infra
+UKI;Study;United Kingdom Signalling (Signalling Business)
+UKR;Service;UK – Regional and Intercity
+UPA;Study;ALSTOM TRANSPORT BIRMINGHAM
+USP;Study;USA Passenger
+USV;Service;Ubunye Services - South Africa
+VB1;Study;Temporary EES site for GSI
+VB2;Study;Temporary EES site for GSI
+VB3;Study;Temporary EES site for GSI
+VEC;Study;ALSTOM TRANSPORT CARACAS
+VER;Study;ALSTOM TRANSPORT VERONE (Organisation TIS)
+VIT;Infra;Alstom - Vitrolles TGS
+VOF;Study;Central Projects Offers Valencienes
+WDN;Service;Widnes Manufacturing
+WGC;Study;WGC for Welwyn Garden City in UK (Signalling)
+WOV;Service;Wolverhampton (Oxley) Traincare Centre
+WRZ;Study;Alstom Konstal SA in Warszawa (Pendolino Depot)
+YYY;Study;---
+ZDS;Study;Alstom Ubunye – South Africa
+ZZZ;Study;---

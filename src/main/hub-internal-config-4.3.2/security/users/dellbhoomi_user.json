@@ -1,0 +1,6 @@
+{
+  "user-name": "%%sdhDBUserName%%",
+  "description": "This user is created for dell bhoomi team who loads data into marklogic",
+  "password": "%%sdhDBUserPassword%%",
+  "role": ["%%sdhDBUserRole%%"]
+}

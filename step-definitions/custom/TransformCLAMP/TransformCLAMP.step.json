@@ -1,0 +1,19 @@
+{
+  "lang" : "zxx",
+  "name" : "TransformCLAMP",
+  "description" : "",
+  "type" : "CUSTOM",
+  "version" : 1,
+  "options" : {
+    "collections" : [ "/final/Orchestra/CLAMP", "/Orchestra/","01-01-2021"],
+    "sourceDatabase" : null,
+    "permissions" : "data-hub-operator,read,data-hub-operator,update,rest-reader,read,rest-writer,update",
+    "outputFormat" : "xml",
+    "targetDatabase" : null
+  },
+  "customHook" : { },
+  "modulePath" : "/custom-modules/custom/TransformCLAMP/main.sjs",
+  "retryLimit" : 0,
+  "batchSize" : 100,
+  "threadCount" : 4
+}
