@@ -1,0 +1,927 @@
+buildscript {
+    repositories {
+        // To use gradle in disconnected mode, you just need to set the 'disconnected' property. E.g. gradle compileJava -Pdisconnected
+        if (project.hasProperty("disconnected") && !"FALSE".equalsIgnoreCase(disconnected)) {
+            println "Using offline buildscript repositories"
+            maven { url uri(projectMavenRepo) }
+        } else {
+            println "Using online buildscript repositories"
+            jcenter()
+            maven { url "http://developer.marklogic.com/maven2/" }
+        }
+    }
+}
+
+plugins {
+    id 'java'
+    id 'eclipse'
+    id 'idea'
+
+    // This plugin allows you to create different environments
+    // for your gradle deploy. Each environment is represented
+    // by a gradle-${env}.properties file
+    // See https://github.com/stevesaliman/gradle-properties-plugin
+    // specify the env on the command line with:
+    // gradle -PenvironmentName=x ...
+    id 'net.saliman.properties' version '1.4.6'
+
+    // This gradle plugin extends the ml-gradle plugin with
+    // commands that make the Data Hub Framework do its magic
+    id 'com.marklogic.ml-data-hub' version '5.2.0'
+}
+
+repositories {
+	// To use gradle in disconnected mode, you just need to set the 'disconnected' property. E.g. gradle compileJava -Pdisconnected
+	if (project.hasProperty("disconnected") && !"FALSE".equalsIgnoreCase(disconnected)) {
+		println "Using offline repositories"		
+		maven { url uri(projectMavenRepo) }
+	} else {
+		println "Using online repositories"
+		jcenter()
+		maven { url "http://developer.marklogic.com/maven2/" }
+	}
+}
+
+configurations {
+	mlcp //example if you want to use mlcp. Delete otherwise
+    corb
+}
+
+dependencies {
+    // this allows you to write custom java code that depends
+    // on the Data Hub Framework library
+    compile 'com.marklogic:marklogic-data-hub:5.2.0'
+    compile 'com.marklogic:marklogic-xcc:9.0.8'
+
+    //sample mlcp dependency. Remove if not required
+	mlcp "com.marklogic:mlcp:9.0.8"
+	/**
+	 * mlcp uses Log4j for logging, and if Log4j can't find a configuration file, it will complain and you'll
+	 * get none of mlcp's usually-useful logging. It is recommended then that your Gradle configuration for
+	 * mlcp include a directory or some other resource that provides a log4j.properties file.
+	 */
+	mlcp files("lib")
+
+    corb "com.marklogic:marklogic-corb:2.4.2"
+}
+
+
+/*
+
+
+
+task enableSSL(type: com.marklogic.gradle.task.MarkLogicTask) {
+    doFirst {
+        def manageConfig = getProject().property("mlManageConfig")
+        manageConfig.setScheme("http")
+        manageConfig.setConfigureSimpleSsl(false)
+        //anageConfig.setAdminScheme("http")
+        //manageConfig.setAdminConfigureSimpleSsl(false)
+
+        def adminConfig = getProject().property("mlAdminConfig")
+        adminConfig.setScheme("http")
+        adminConfig.setConfigureSimpleSsl(false)
+
+        def manageClient = new com.marklogic.mgmt.ManageClient(manageConfig)
+        def adminManager = new com.marklogic.mgmt.admin.AdminManager(adminConfig)
+
+        def certManager = new com.marklogic.mgmt.resource.security.CertificateTemplateManager(manageClient)
+        certManager.save(adminCert())
+
+        def gtcc = new com.marklogic.appdeployer.command.security.GenerateTemporaryCertificateCommand();
+        gtcc.setTemplateIdOrName("admin-cert");
+        gtcc.setCommonName("localhost");
+        gtcc.execute(new com.marklogic.appdeployer.command.CommandContext(getAppConfig(), manageClient, adminManager));
+
+        adminConfig = getProject().property("mlAdminConfig")
+        adminConfig.setScheme("https")
+        adminConfig.setConfigureSimpleSsl(true)
+        adminManager = new com.marklogic.mgmt.admin.AdminManager(adminConfig)
+
+        manageClient.putJson("/manage/v2/servers/Admin/properties?group-id=Default", '{"ssl-certificate-template": "admin-cert"}')
+        adminManager.waitForRestart()
+        manageClient.putJson("/manage/v2/servers/App-Services/properties?group-id=Default", '{"ssl-certificate-template": "admin-cert"}')
+        adminManager.waitForRestart()
+        manageClient.putJson("/manage/v2/servers/Manage/properties?group-id=Default", '{"ssl-certificate-template": "admin-cert"}')
+        adminManager.waitForRestart()
+    }
+}
+
+// Disables SSL on the builtin servers
+task disableSSL(type: com.marklogic.gradle.task.MarkLogicTask) {
+    doFirst {
+        // for ML9. comment out if using ml8
+        def manageClient = getManageClient()
+        manageClient.putJson("/manage/v2/servers/Admin/properties?group-id=Default", '{"ssl-certificate-template": ""}')
+        manageClient.putJson("/manage/v2/servers/App-Services/properties?group-id=Default", '{"ssl-certificate-template": ""}')
+        manageClient.putJson("/manage/v2/servers/Manage/properties?group-id=Default", '{"ssl-certificate-template": ""}')
+
+        // for ML8 do this instead
+        // def appConfig = getAppConfig()
+        // disableSSL(appConfig, "Admin")
+        // disableSSL(appConfig, "Manage")
+        // disableSSL(appConfig, "App-Services")
+
+        def adminConfig = getProject().property("mlAdminConfig")
+        adminConfig.setScheme("http")
+        adminConfig.setConfigureSimpleSsl(false)
+        def adminManager = new com.marklogic.mgmt.admin.AdminManager(adminConfig)
+        adminManager.waitForRestart()
+
+        def manageConfig = getProject().property("mlManageConfig")
+        manageConfig.setScheme("http")
+        manageConfig.setConfigureSimpleSsl(false)
+        def mgClient = new com.marklogic.mgmt.ManageClient(manageConfig)
+
+        def certManager = new com.marklogic.mgmt.resource.security.CertificateTemplateManager(mgClient)
+        certManager.delete(adminCert())
+    }
+}
+
+// there is a bug in ML 8 that won't unset the ssl
+def disableSSL(appConfig, serverName) {
+    def eval = appConfig.newAppServicesDatabaseClient().newServerEval()
+    def xqy = """
+        import module namespace admin = "http://marklogic.com/xdmp/admin"
+          at "/MarkLogic/admin.xqy";
+        let \$config := admin:get-configuration()
+        let \$appServer := admin:appserver-get-id(\$config,
+            admin:group-get-id(\$config, "Default"), "${serverName}")
+        let \$config := admin:appserver-set-ssl-certificate-template(\$config, \$appServer, 0)
+        return
+          admin:save-configuration(\$config)
+    """
+    def result = eval.xquery(xqy).eval()
+}
+
+// Returns a certificate Request for use on the builtin appservers
+def adminCert() {
+    return """
+    <certificate-template-properties xmlns="http://marklogic.com/manage">
+      <template-name>admin-cert</template-name>
+      <template-description>System Cert</template-description>
+      <key-type>rsa</key-type>
+      <key-options />
+      <req>
+        <version>0</version>
+        <subject>
+          <organizationName>MarkLogic</organizationName>
+        </subject>
+      </req>
+    </certificate-template-properties>
+    """
+}
+//ADMIN CERTIFICATE END
+*/
+
+/**
+ * START: Disconnected gradle tasks
+ */
+gradle.taskGraph.whenReady { graph ->
+	if (graph.hasTask(downloadToProjectMavenRepo)) {
+		println project.gradle.gradleUserHomeDir
+		if (!project.gradle.gradleUserHomeDir.equals(new File(rootDir, projectGradleHome))) {
+			throw new GradleException("Please set the gradle user home property to $projectGradleHome on the gradle command line - e.g. \n " +
+				(System.getProperty("os.name").startsWith("Windows") ? "" : "./") +
+				"gradlew -Dgradle.user.home=$projectGradleHome <task_to_execute>")
+		}
+	}
+}
+
+task downloadToProjectMavenRepo(type: Copy) {
+	/*
+	 * Include any configuration dependencies here that you want to copy the dependencies for.
+	 * These are defined in the 'dependencies' block. E.g. you need to include
+	 * configurations.compile.files if you want your java 'compile' dependencies downloaded
+	 */
+	configurations.compile.files //includes 'java' compile dependencies. Remove if not needed
+	configurations.mlcp.files //includes 'mlcp' dependencies. Remove if not needed
+	configurations.corb.files //includes 'corb' dependencies. Remove if not needed
+
+	from new File(gradle.gradleUserHomeDir, 'caches/modules-2/files-2.1') // correct as of gradle 4.7
+	into new File(rootDir, projectMavenRepo)
+	eachFile {
+		List<String> parts = it.path.split('/')
+		it.path = (parts[0].replace('.', '/') + '/' + parts[1]) + '/' + parts[2] + '/' + parts[4]
+	}
+	includeEmptyDirs false
+}
+
+task makeOfflineZip(type: Zip, dependsOn: downloadToProjectMavenRepo) {
+	from rootDir
+	excludes = ['.tmp', '.gradle', 'build/gradle-home', 'build/distributions', 'build/offline/gradle/wrapper/dists']
+	destinationDir(file('build/distributions'))
+	archiveName = 'offline.zip'
+	doLast {
+		println "Created offline project zip at build/distributions/offline.zip"
+	}
+}
+
+/**
+ * END: Disconnected gradle tasks
+ */
+
+ext{
+  currentDate = new Date().format( 'dd-MM-yyyy' )
+}
+ /**
+ * Start mlcpExample
+ */
+task mlcpExample(type: com.marklogic.gradle.task.MlcpTask) {
+	classpath = configurations.mlcp
+	command = "IMPORT"
+	database = "smart-data-hub-STAGING"
+	port = 8017 
+	input_file_path = "data/sample.csv" //assumes a csv file exists at "data/sample.csv" 
+	input_file_type = "delimited_text"
+	delimiter = ";"
+	document_type = "json"
+	output_collections = "/type/data"
+	output_uri_prefix = "/data/"
+	output_uri_replace = ".*/data/,''"
+}
+
+task corbSAPBOL(type: com.marklogic.gradle.task.CorbTask) {
+  classpath = configurations.corb
+  xccConnectionUri = contentXccUrl
+  moduleRoot = "/ext/SAP_BOL/"
+  urisModule = "uris.xqy"
+  processModule = "transform.xqy"
+  threadCount = 10
+}
+
+task importCLAMPManager(type: com.marklogic.gradle.task.MlcpTask) {
+        classpath = configurations.mlcp
+        command = "IMPORT"
+        port = 8017
+        database = "smart-data-hub-STAGING"
+        input_file_path = "input/CLAMP/manager_mapping.csv"
+        input_file_type = "delimited_text"
+        delimiter = ";"
+        document_type = "xml"
+        output_collections = "/sources/CLAMP/manager"
+        output_uri_prefix = "/manager/"
+        output_uri_suffix = ".xml"
+}
+task exportCLAMPDelta(type: com.marklogic.gradle.task.MlcpTask){
+	classpath = configurations.mlcp
+        command = "EXPORT"
+        database = "smart-data-hub-STAGING"
+	port = 8015
+	collection_filter = "2020-09-29T04:45:00"
+	output_file_path = "export/CLAMPDelta/2020-09-29T04:45:00"
+}
+
+task exportPO(type: com.marklogic.gradle.task.MlcpTask){
+	classpath = configurations.mlcp
+        command = "EXPORT"
+        database = "smart-data-hub-STAGING"
+	port = 8015
+        collection_filter = "2020-09-11"
+	output_file_path = "export/PO"
+	compress = true
+}
+
+task exportVBAP(type: com.marklogic.gradle.task.MlcpTask){
+	classpath = configurations.mlcp
+        command = "EXPORT"
+        database = "smart-data-hub-STAGING"
+        port = 8015
+        collection_filter = "/sources/GSI/VBAP"
+        output_file_path = "export/GSI/VBAP"
+	compress = true
+}
+
+task exportPLM(type: com.marklogic.gradle.task.MlcpTask){
+	classpath = configurations.mlcp
+        command = "EXPORT"
+        database = "smart-data-hub-STAGING"
+        port = 8015
+        collection_filter = "/sources/PLM/Master/"
+	output_file_path = "export/PLM/Master"
+}
+
+task importCLAMP(type: com.marklogic.gradle.task.MlcpTask) {
+  classpath = configurations.mlcp
+  command = "IMPORT"
+  port = 8017
+  database = "smart-data-hub-STAGING"
+  input_file_path = "input/CLAMP/"
+  input_file_type = "documents"
+  document_type = "xml"
+  output_uri_replace = ".*/,''"
+  output_collections = "/sources/CLAMP,${currentDate}"
+  output_uri_prefix = "/sources/CLAMP/"
+  input_compressed = false
+}
+
+  task importGSIMARA(type: com.marklogic.gradle.task.MlcpTask) {
+    classpath = configurations.mlcp
+    command = "IMPORT"
+	port = 8017
+    database = "smart-data-hub-STAGING"
+    input_file_path = "input/GSI/MARA"
+    input_file_type = "delimited_text"
+	document_type = "xml"
+    delimiter = ","
+    output_collections = "/sources/GSI/MARA,${currentDate}"
+    output_uri_prefix = "/sources/GSI/MARA/"
+    output_uri_replace = ".*/,''"
+    generate_uri = true
+  }
+
+ task importGSIMARC(type: com.marklogic.gradle.task.MlcpTask) {
+    classpath = configurations.mlcp
+    command = "IMPORT"
+	port = 8017
+    database = "smart-data-hub-STAGING"
+    input_file_path = "input/GSI/MARC"
+    input_file_type = "delimited_text"
+	document_type = "xml"
+    delimiter = ","
+    output_collections = "/sources/GSI/MARC,${currentDate}"
+    output_uri_prefix = "/sources/GSI/MARC/"
+    output_uri_replace = ".*/,''"
+    generate_uri = true
+  }
+
+   task importGSIVBAP(type: com.marklogic.gradle.task.MlcpTask) {
+    classpath = configurations.mlcp
+    command = "IMPORT"
+    port = 8017
+    database = "smart-data-hub-STAGING"
+    input_file_path = "input/GSI/VBAP"
+    input_file_type = "delimited_text"
+    delimiter = "|"
+    output_collections = "/sources/GSI/VBAP,${currentDate}"
+    output_uri_prefix = "/sources/GSI/"
+    output_uri_replace = ".*/,''"
+    generate_uri = true
+  }
+
+   task importGSIYYYVMM_MPN(type: com.marklogic.gradle.task.MlcpTask) {
+    classpath = configurations.mlcp
+    command = "IMPORT"
+	port = 8017
+    database = "smart-data-hub-STAGING"
+    input_file_path = "input/GSI/YYYVMM_MPN"
+    input_file_type = "delimited_text"
+    delimiter = ","
+    output_collections = "/sources/GSI/YYYVMM_MPN,${currentDate}"
+    output_uri_prefix = "/sources/GSI/YYYVMM_MPN/"
+    output_uri_replace = ".*/,''"
+    generate_uri = true
+  }
+    task importGSIMAKT(type: com.marklogic.gradle.task.MlcpTask) {
+    classpath = configurations.mlcp
+    command = "IMPORT"
+    port = 8017
+    database = "smart-data-hub-STAGING"
+    input_file_path = "input/GSI/MAKT"
+    input_file_type = "delimited_text"
+    delimiter = ","
+    output_collections = "/sources/GSI/MAKT,${currentDate}"
+    output_uri_prefix = "/sources/GSI/MAKT/"
+    output_uri_replace = ".*/,''"
+    generate_uri = true
+}
+
+    task importGSIAUSP(type: com.marklogic.gradle.task.MlcpTask) {
+    classpath = configurations.mlcp
+    command = "IMPORT"
+    port = 8017
+    database = "smart-data-hub-STAGING"
+    input_file_path = "input/GSI/AUSP"
+    input_file_type = "delimited_text"
+    delimiter = ","
+    output_collections = "/sources/GSI/AUSP,${currentDate}"
+    output_uri_prefix = "/sources/GSI/AUSP/"
+    output_uri_replace = ".*/,''"
+    generate_uri = true
+}
+
+    task importPLMMaster(type: com.marklogic.gradle.task.MlcpTask) {
+    classpath = configurations.mlcp
+    command = "IMPORT"
+    port = 8017
+    database = "smart-data-hub-STAGING"
+    input_file_path = "input/PLM/Master"
+    input_file_type = "delimited_text"
+    delimiter = "|"
+    output_collections = "/sources/PLM/EngineeringParts,/sources/PLM/Master/,${currentDate}"
+    output_uri_prefix = "/sources/PLM/Master/"
+    output_uri_replace = ".*/,''"
+    generate_uri = true
+}
+
+    task importPLMExternal(type: com.marklogic.gradle.task.MlcpTask) {
+    classpath = configurations.mlcp
+    command = "IMPORT"
+    port = 8017
+    database = "smart-data-hub-STAGING"
+    input_file_path = "input/PLM/External"
+    input_file_type = "delimited_text"
+    delimiter = "|"
+    output_collections = "/sources/PLM/ExternalParts,${currentDate}"
+    output_uri_prefix = "/sources/PLM/External/"
+    output_uri_replace = ".*/,''"
+    generate_uri = true
+}
+
+    task importPLMAlternate(type: com.marklogic.gradle.task.MlcpTask) {
+    classpath = configurations.mlcp
+    command = "IMPORT"
+    port = 8017
+    database = "smart-data-hub-STAGING"
+    input_file_path = "input/PLM/Alternate"
+    input_file_type = "delimited_text"
+    delimiter = "|"
+    output_collections = "/sources/PLM/AlternateEquivalentParts,${currentDate}"
+    output_uri_prefix = "/sources/PLM/Alternate/"
+    output_uri_replace = ".*/,''"
+    generate_uri = true
+}
+
+ task importPLMIndus(type: com.marklogic.gradle.task.MlcpTask) {
+    classpath = configurations.mlcp
+    command = "IMPORT"
+    port = 8017
+    database = "smart-data-hub-STAGING"
+    input_file_path = "input/PLM/Indus"
+    input_file_type = "delimited_text"
+    delimiter = "|"
+    output_collections ="/sources/PLM/IndustrialPart,/sources/PLM/Master/,${currentDate}"
+    output_uri_prefix = "/sources/PLM/Indus/"
+    output_uri_replace = ".*/,''"
+    generate_uri = true
+}
+   task importGlobalUOMReference(type: com.marklogic.gradle.task.MlcpTask) {
+    classpath = configurations.mlcp
+    command = "IMPORT"
+	port = 8017
+    database = "smart-data-hub-STAGING"
+    input_file_path = "input/UOMGlobalReference"
+    input_file_type = "documents"
+    output_collections = "/sources/Global,${currentDate}"
+    output_uri_prefix = "/sources/Global/"
+    output_uri_replace = ".*/,''"
+    generate_uri = true
+  }
+
+//SDH-FINAL Corb Jobs 
+def XccFinalHost1 = "xcc://${mlUsername}:${mlPassword}@${mlHost1}:${mlFinalLbPort}/"
+def XccFinalHost2 = "xcc://${mlUsername}:${mlPassword}@${mlHost2}:${mlFinalLbPort}/"
+def XccFinalHost3 = "xcc://${mlUsername}:${mlPassword}@${mlHost3}:${mlFinalLbPort}/"
+
+task step2HarmonizationPC(type: com.marklogic.gradle.task.CorbTask) {
+
+  moduleRoot = "/ext/Step2HarmzPC/"
+  urisModule = "uris.xqy"
+  processModule = "transform.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI","${XccFinalHost1},${XccFinalHost2},${XccFinalHost3}"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+
+task step2Harmonization(type: com.marklogic.gradle.task.CorbTask) {
+
+  moduleRoot = "/ext/Step2Harmz/"
+  urisModule = "uris.xqy"
+  processModule = "transform.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI","${XccFinalHost1},${XccFinalHost2},${XccFinalHost3}"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+
+task PLM_collectionDelete(type: com.marklogic.gradle.task.CorbTask ) {
+
+	xccConnectionUri = "xcc://${mlUsername}:${mlPassword}@${mlHost}:${mlStagingPort}"
+        moduleRoot = "/ext/PLM_collectionDelete"
+        urisModule = "uris.xqy"
+        processModule = "transform.xqy"
+        threadCount = 12
+}
+
+task deleteProperties(type: com.marklogic.gradle.task.CorbTask ) {
+
+	def collection = project.findProperty("collection")
+	moduleRoot = "/ext/DeleteDocProperties/"
+	urisModule = "uris.xqy"
+	processModule = "transform.xqy"
+  	threadCount = 12	
+	systemProperty "XCC-CONNECTION-URI", "xcc://${mlUsername}:${mlPassword}@${mlHost}:${mlStagingPort}"
+	systemProperty "URIS-MODULE.collection" , "${collection}"
+	systemProperty "DISK-QUEUE", "true"
+  	systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+
+task corbSetPermission(type: com.marklogic.gradle.task.CorbTask ) {
+  moduleRoot = "/ext/CorbSetPermission/"
+  urisModule = "uris.xqy"
+  processModule = "transform.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccFinalHost1},${XccFinalHost2},${XccFinalHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+
+task GSIExtract(type: com.marklogic.gradle.task.CorbTask ) {
+  moduleRoot = "GSIExtract"
+  urisModule = "uris.xqy"
+  processModule = "transform.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccFinalHost1},${XccFinalHost2},${XccFinalHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+
+/*
+task hmnzOrchestraCLAMPStep1(type: com.marklogic.gradle.task.hubRunFlowTask) {
+entityName = "Orchestra"
+batchSize = 200
+showOptions = true
+flowName = "PLMSIGOrchestra"
+steps = "1"
+}
+*/
+
+//Orchestra Jobs//
+task importfamilyid_lookup(type: com.marklogic.gradle.task.MlcpTask) {
+    classpath = configurations.mlcp
+    command = "IMPORT"
+	  port = 8015
+    database = "smart-data-hub-STAGING"
+    input_file_path = "input/familyid_lookup"
+    input_file_type = "delimited_text"
+    output_collections = "familyid_lookup_collection_Test"
+    output_uri_prefix = "/familyid_upload_v2/"
+    output_uri_replace = "^.*/familyid_lookup,''"
+    generate_uri = true
+    xml_repair_level = "full"
+  }
+
+task corbOrchestraStep2(type: com.marklogic.gradle.task.CorbTask) {
+  classpath = configurations.corb
+  /*xccConnectionUri = contentXccUrl*/
+  moduleRoot = "/ext/OrchestraHarmoniztion/Step2Hmnz/"
+  urisModule = "uriStep2.xqy"
+  processModule = "TransformStep2.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccFinalHost1},${XccFinalHost2},${XccFinalHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+
+task corbOrchestraDeltaStep2(type: com.marklogic.gradle.task.CorbTask) {
+  classpath = configurations.corb
+  /*xccConnectionUri = contentXccUrl*/
+  moduleRoot = "/ext/OrchestraHarmoniztion/Step2Hmnz/"
+  urisModule = "uriDeltaStep2.xqy"
+  processModule = "TransformDeltaStep2.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccFinalHost1},${XccFinalHost2},${XccFinalHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+
+task corbUpdateUOM(type: com.marklogic.gradle.task.CorbTask) {
+  classpath = configurations.corb
+  /*xccConnectionUri = contentXccUrl*/
+  moduleRoot = "/ext/OrchestraHarmoniztion/UpdateUOM/"
+  urisModule = "U_UpdateUOM.xqy"
+  processModule = "T_UpdateUOM.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccFinalHost1},${XccFinalHost2},${XccFinalHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+
+// Corb Jobs mlStagingPort def mlStagingPort1 = "8015"
+
+def XccStagingHost1 = "xcc://${mlUsername}:${mlPassword}@${mlHost1}:${mlXDBCPort}/"
+def XccStagingHost2 = "xcc://${mlUsername}:${mlPassword}@${mlHost2}:${mlXDBCPort}/"
+def XccStagingHost3 = "xcc://${mlUsername}:${mlPassword}@${mlHost3}:${mlXDBCPort}/"
+
+task corbMig_Seg_Batch(type: com.marklogic.gradle.task.CorbTask) {
+
+  //def batch = project.findProperty("batch")
+  classpath = configurations.corb
+  /*xccConnectionUri = contentXccUrl*/
+  moduleRoot = "/ext/Migration/BatchSegregation"
+  urisModule = "U_BatchSegregation.xqy"
+  processModule = "T_BatchSegregation.xqy"
+  //systemProperty "PROCESS-MODULE.batch" , "${batch}"
+  //systemProperty "URIS-MODULE.batch" , "${batch}"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccStagingHost1},${XccStagingHost2},${XccStagingHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+
+//Parameterized corbMig_Seg_Object Job
+task corbMig_Seg_Object(type: com.marklogic.gradle.task.CorbTask) {
+
+  def batch = project.findProperty("batch")
+  classpath = configurations.corb
+  /*xccConnectionUri = contentXccUrl*/
+  moduleRoot = "/ext/Migration/ObjectSegregation"
+  urisModule = "U_MigrationSegregation.xqy"
+  processModule = "T_MigrationSegregation.xqy"
+  systemProperty "PROCESS-MODULE.batch" , "${batch}"
+  systemProperty "URIS-MODULE.batch" , "${batch}"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccStagingHost1},${XccStagingHost2},${XccStagingHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+
+//Parameterized corbMig_Seg_Object Job
+task corbMig_PPLSeg_Object(type: com.marklogic.gradle.task.CorbTask) {
+
+  def batch = project.findProperty("batch")
+  classpath = configurations.corb
+  /*xccConnectionUri = contentXccUrl*/
+  moduleRoot = "/ext/Migration/ObjectSegregation"
+  urisModule = "U_MigrationSegregation.xqy"
+  processModule = "T_MigrationSegregationPPL.xqy"
+  systemProperty "PROCESS-MODULE.batch" , "${batch}"
+  systemProperty "URIS-MODULE.batch" , "${batch}"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccStagingHost1},${XccStagingHost2},${XccStagingHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+
+//Parameterized corbMig_Seg_Object Job
+task corbMig_GSISeg_Object(type: com.marklogic.gradle.task.CorbTask) {
+
+  def batch = project.findProperty("batch")
+  classpath = configurations.corb
+  /*xccConnectionUri = contentXccUrl*/
+  moduleRoot = "/ext/Migration/ObjectSegregation"
+  urisModule = "U_MigrationSegregation.xqy"
+  processModule = "T_MigrationSegregationGSI.xqy"
+  systemProperty "PROCESS-MODULE.batch" , "${batch}"
+  systemProperty "URIS-MODULE.batch" , "${batch}"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccStagingHost1},${XccStagingHost2},${XccStagingHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+
+//Corb for Migration excel generation
+
+task corbMig_generatePartExcel(type: com.marklogic.gradle.task.CorbTask) {
+
+  //def batch = project.findProperty("batch")
+  classpath = configurations.corb
+  /*xccConnectionUri = contentXccUrl*/
+  moduleRoot = "/ext/Migration/ExcelCreation/Parts"
+  initModule = "Mig_Init.xqy"
+  urisModule = "Mig_Uris.xqy"
+  processModule = "Mig_Process.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccStagingHost1},${XccStagingHost2},${XccStagingHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+  systemProperty "INIT-MODULE.excelIdentifier" , "parts"
+  systemProperty "INIT-MODULE.excelUri" , "/w2_clamp_migration/DataMigartion/Incr3/M4_Refresh_Mig/parts/parts.xml"
+  systemProperty "PROCESS-MODULE.excelUri" , "/w2_clamp_migration/DataMigartion/Incr3/M4_Refresh_Mig/parts/parts.xml"
+  systemProperty "PROCESS-MODULE.collectionName" , "M_orchestra_all_ppl_parts_rv3_parts"
+     //initModule.excelIdentifier="parts"
+
+//############### NEEDS UPDATE #############
+//processModule.excelUri="/w2_clamp_migration/DataMigartion/Incr3/M4_Refresh_Mig/parts/parts.xml"
+//initModule.excelUri="/w2_clamp_migration/DataMigartion/Incr3/M4_Refresh_Mig/parts/parts.xml"
+//processModule.collectionName="M_orchestra_all_ppl_parts_rv3_parts"
+}
+
+task corbMig_GenericExcelCreation_M4(type: com.marklogic.gradle.task.CorbTask) {
+
+  //def batch = project.findProperty("batch")
+  classpath = configurations.corb
+  /*xccConnectionUri = contentXccUrl*/
+  moduleRoot = "/ext/Migration/ExcelCreation/Generic"
+  initModule = "I_ExcelCreation.xqy"
+  urisModule = "U_ExcelCreation.xqy"
+  processModule = "P_ExcelCreation.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccStagingHost1},${XccStagingHost2},${XccStagingHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+
+systemProperty "INIT-MODULE.excelIdentifier_parts","parts"
+systemProperty "INIT-MODULE.excelIdentifier_familyattributevalue","familyattributevalue"
+systemProperty "INIT-MODULE.excelIdentifier_familyclassificationlink","familyclassificationlink"
+systemProperty "INIT-MODULE.excelIdentifier_partcomposedby","partcomposedby"
+systemProperty "INIT-MODULE.excelIdentifier_partscustomer","partscustomer"
+systemProperty "INIT-MODULE.excelIdentifier_partsmanufacturer","partsmanufacturer"
+
+//############### NEEDS UPDATE #############
+systemProperty "PROCESS-MODULE.excelUri","/w2_clamp_migration/DataMigartion/Incr3/RefreshedData/M4/"
+systemProperty "INIT-MODULE.excelUri","/w2_clamp_migration/DataMigartion/Incr3/RefreshedData/M4/"
+systemProperty "PROCESS-MODULE.collectionName_parts","M_orchestra_all_ppl_parts_rv3_parts"
+systemProperty "PROCESS-MODULE.collectionName_partsmanufacturer","M_orchestra_all_ppl_parts_rv3_partManufacturer"
+systemProperty "PROCESS-MODULE.collectionName_partcomposedby","M_orchestra_all_ppl_parts_rv3_partcomposedby"
+systemProperty "PROCESS-MODULE.collectionName_partcustomer","M_orchestra_all_ppl_parts_rv3_partcustomer"
+systemProperty "PROCESS-MODULE.collectionName_familyparts","M_orchestra_all_ppl_parts_rv3_familyparts"
+systemProperty "PROCESS-MODULE.collectionName_familyclassification","M_orchestra_all_ppl_parts_rv3_familyclassification"
+}
+//Excel creation for M8(orchestra_subscribed_railsys_rv3) Batch 
+task corbMig_GenericExcelCreation_M8(type: com.marklogic.gradle.task.CorbTask) {
+
+  //def batch = project.findProperty("batch")
+  classpath = configurations.corb
+  /*xccConnectionUri = contentXccUrl*/
+  moduleRoot = "/ext/Migration/ExcelCreation/Generic"
+  initModule = "I_ExcelCreation.xqy"
+  urisModule = "U_ExcelCreation.xqy"
+  processModule = "P_ExcelCreation.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccStagingHost1},${XccStagingHost2},${XccStagingHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+
+systemProperty "INIT-MODULE.excelIdentifier_parts","parts"
+systemProperty "INIT-MODULE.excelIdentifier_familyattributevalue","familyattributevalue"
+systemProperty "INIT-MODULE.excelIdentifier_familyclassificationlink","familyclassificationlink"
+systemProperty "INIT-MODULE.excelIdentifier_partcomposedby","partcomposedby"
+systemProperty "INIT-MODULE.excelIdentifier_partscustomer","partscustomer"
+systemProperty "INIT-MODULE.excelIdentifier_partsmanufacturer","partsmanufacturer"
+
+//############### NEEDS UPDATE #############
+systemProperty "PROCESS-MODULE.excelUri","/w2_clamp_migration/DataMigartion/Incr3/RefreshedData/M8/"
+systemProperty "INIT-MODULE.excelUri","/w2_clamp_migration/DataMigartion/Incr3/RefreshedData/M8/"
+systemProperty "PROCESS-MODULE.collectionName_parts","M_orchestra_subscribed_railsys_rv3_parts"
+systemProperty "PROCESS-MODULE.collectionName_partsmanufacturer","M_orchestra_subscribed_railsys_rv3_partManufacturer"
+systemProperty "PROCESS-MODULE.collectionName_partcomposedby","M_orchestra_subscribed_railsys_rv3_partcomposedby"
+systemProperty "PROCESS-MODULE.collectionName_partcustomer","M_orchestra_subscribed_railsys_rv3_partcustomer"
+systemProperty "PROCESS-MODULE.collectionName_familyparts","M_orchestra_subscribed_railsys_rv3_familyparts"
+systemProperty "PROCESS-MODULE.collectionName_familyclassification","M_orchestra_subscribed_railsys_rv3_familyclassification"
+}
+
+//In-Progress
+task corbMig_GenericExcelCreation(type: com.marklogic.gradle.task.CorbTask) {
+
+  def Batch = project.findProperty("Batch") //expected Value :M8/1 ,M8/2 ,M5/1
+  def Object = project.findProperty("Object") //M_orchestra_subscribed_railsys_rv3_parts,M_orchestra_subscribed_railsys_rv3_partManufacturer
+  def ObjectIdentifier = project.findProperty("ObjectIdentifier") //expected Values:parts,familyattributevalue,familyclassificationlink,partcomposedby,partscustomer,partsmanufacturer
+  def Start = project.findProperty("Start")
+  def Size = project.findProperty("Size")
+  
+  classpath = configurations.corb
+  /*xccConnectionUri = contentXccUrl*/
+  moduleRoot = "/ext/Migration/ExcelCreation/Generic"
+  initModule = "I_ExcelCreation.xqy"
+  urisModule = "U_ExcelCreation.xqy"
+  processModule = "P_ExcelCreation.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccStagingHost1},${XccStagingHost2},${XccStagingHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+  
+//############### INIT-MODULE  #############
+
+systemProperty "INIT-MODULE.excelIdentifier","${ObjectIdentifier}"
+systemProperty "INIT-MODULE.Batch","${Batch}"
+systemProperty "INIT-MODULE.excelUri","/w2_clamp_migration/DataMigartion/Incr3/17AUG21/MIG5/"
+//systemProperty "INIT-MODULE.excelIdentifier_parts","parts"
+//systemProperty "INIT-MODULE.excelIdentifier_familyattributevalue","familyattributevalue"
+//systemProperty "INIT-MODULE.excelIdentifier_familyclassificationlink","familyclassificationlink"
+//systemProperty "INIT-MODULE.excelIdentifier_partcomposedby","partcomposedby"
+//systemProperty "INIT-MODULE.excelIdentifier_partscustomer","partscustomer"
+//systemProperty "INIT-MODULE.excelIdentifier_partsmanufacturer","partsmanufacturer"
+
+//############### Process module #############
+systemProperty "PROCESS-MODULE.excelUri","/w2_clamp_migration/DataMigartion/Incr3/17AUG21/MIG5/"
+systemProperty "PROCESS-MODULE.collectionName","${Object}"
+systemProperty "PROCESS-MODULE.Batch","${Batch}"
+systemProperty "PROCESS-MODULE.excelIdentifier","${ObjectIdentifier}"
+systemProperty "PROCESS-MODULE.Start","${Start}"
+systemProperty "PROCESS-MODULE.Size","${Size}"
+//systemProperty "PROCESS-MODULE.excelUri","/w2_clamp_migration/DataMigartion/Incr3/RefreshedData/"
+//systemProperty "PROCESS-MODULE.collectionName_parts","M_orchestra_subscribed_railsys_rv3_parts"
+//systemProperty "PROCESS-MODULE.collectionName_partsmanufacturer","M_orchestra_subscribed_railsys_rv3_partManufacturer"
+//systemProperty "PROCESS-MODULE.collectionName_partcomposedby","M_orchestra_subscribed_railsys_rv3_partcomposedby"
+//systemProperty "PROCESS-MODULE.collectionName_partcustomer","M_orchestra_subscribed_railsys_rv3_partcustomer"
+//systemProperty "PROCESS-MODULE.collectionName_familyparts","M_orchestra_subscribed_railsys_rv3_familyparts"
+//systemProperty "PROCESS-MODULE.collectionName_familyclassification","M_orchestra_subscribed_railsys_rv3_familyclassification"
+}
+
+ task exportXML2CSV(type: com.marklogic.gradle.task.MlcpTask) {
+    classpath = configurations.mlcp
+    command = "EXPORT"
+    port = 8015
+    database = "smart-data-hub-STAGING"
+    output_file_path = "input/Migration/Output/050821"
+    directory_filter = "/w2_clamp_migration/DataMigartion/Incr3/AUG21/16AUG21/MIG5/"
+
+}
+
+task collectionDelete(type: com.marklogic.gradle.task.CorbTask ) {
+
+  def collection = project.findProperty("collection")
+  //def port = project.findProperty("port")
+  moduleRoot = "/ext/collectionDelete/"
+  urisModule = "uris.xqy"
+  processModule = "transform.xqy"
+  threadCount = 16
+  //systemProperty "XCC-CONNECTION-URI","${XccStagingHost1},${XccStagingHost2},${XccStagingHost3}"
+  systemProperty "XCC-CONNECTION-URI","${XccFinalHost1},${XccFinalHost2},${XccFinalHost3}"
+  systemProperty "URIS-MODULE.deleteCollection", "${collection}"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+
+task Import(type: com.marklogic.gradle.task.MlcpTask) {
+   classpath = configurations.mlcp
+   def collection = project.findProperty("collection")
+   command = "IMPORT"
+   port = 8015
+   input_file_type = "archive"
+   input_file_path = "./import/CLAMP"
+}
+
+task DisplayDate{
+  println new Date().format( 'yyyy-MM-dd' )
+}
+
+task hubPreInstallCheck(overwrite:true){}
+
+task partTypeFullLoad(type: com.marklogic.gradle.task.CorbTask) {
+
+  classpath = configurations.corb
+  moduleRoot = "/ext/OrchestraHarmoniztion/UpdatePartType/"
+  urisModule = "U_PartType.xqy"
+  processModule = "T_PartType.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccStagingHost1},${XccStagingHost2},${XccStagingHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+task partTypeDeltaLoad(type: com.marklogic.gradle.task.CorbTask) {
+
+  classpath = configurations.corb
+  moduleRoot = "/ext/OrchestraHarmoniztion/UpdatePartType/"
+  urisModule = "U_PartType.xqy"
+  processModule = "T_PartTypeDelta.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccStagingHost1},${XccStagingHost2},${XccStagingHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+
+task corbPreviousDate(type: com.marklogic.gradle.task.CorbTask) {
+  classpath = configurations.corb
+  /*xccConnectionUri = contentXccUrl*/
+  moduleRoot = "/ext/OrchestraHarmoniztion/PreviousDate_extractPartAcquisition/"
+  urisModule = "U_PreviousDate.xqy"
+  processModule = "T_PreviousDate.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccFinalHost1},${XccFinalHost2},${XccFinalHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+
+task corbUpdateUNSPSC(type: com.marklogic.gradle.task.CorbTask) {
+  classpath = configurations.corb
+  /*xccConnectionUri = contentXccUrl*/
+  moduleRoot = "/ext/OrchestraHarmoniztion/UNSPSC/"
+  urisModule = "U_UpdateUNSPSC.xqy"
+  processModule = "T_UpdateUNSPSC.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccStagingHost1},${XccStagingHost2},${XccStagingHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}
+task corbUpdateUNSPSCDelta(type: com.marklogic.gradle.task.CorbTask) {
+  classpath = configurations.corb
+  /*xccConnectionUri = contentXccUrl*/
+  moduleRoot = "/ext/OrchestraHarmoniztion/UNSPSC/"
+  urisModule = "U_UpdateUNSPSC.xqy"
+  processModule = "T_UpdateUNSPSCDelta.xqy"
+  threadCount = 16
+  systemProperty "XCC-CONNECTION-URI", "${XccStagingHost1},${XccStagingHost2},${XccStagingHost3}"
+  systemProperty "CONNECTION-POLICY", "ROUND-ROBIN"
+  systemProperty "DISK-QUEUE", "true"
+  systemProperty "DISK-QUEUE-MAX-IN-MEMORY-SIZE", "100000"
+}

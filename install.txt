@@ -1,0 +1,8 @@
+srsdc107554l601 (DEV) : 10.243.192.143
+srsdc107554l401 (QUAL) : 10.243.192.179
+ 
+u_415117           Alstom567password*
+Nishanth BHASKAR       
+             
+u_93935             Alstom567password*  
+>su root sudo su –

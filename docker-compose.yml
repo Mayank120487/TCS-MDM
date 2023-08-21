@@ -1,0 +1,14 @@
+version: '3.6'
+services:
+  node1:
+    image: "mlregistry.marklogic.com/marklogic/ml-9.0-8"
+    ports:
+      - "8000-8060:8000-8060"
+    hostname: "hub.alstom"
+    container_name: "hub.alstom"
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.13.0.0/16
